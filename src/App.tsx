@@ -1,62 +1,47 @@
 import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 import BookmarkList from "./components/BookmarkList";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  const [bookmarks, setBookmarks] = useState<
-    chrome.bookmarks.BookmarkTreeNode[] | undefined
-  >([]);
+  const [currentNodes, setCurrentNodes] = useState<chrome.bookmarks.BookmarkTreeNode[]>([]);
+  const [folderStack, setFolderStack] = useState<chrome.bookmarks.BookmarkTreeNode[][]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
       if (!bookMarkTreeNodes || bookMarkTreeNodes.length === 0) return;
-      const root = bookMarkTreeNodes[0]; // Root node
-      setBookmarks(root.children); // Set the bookmarks to the children of the root node
+      const root = bookMarkTreeNodes[0];
+      setCurrentNodes(root.children || []);
       setLoading(false);
     });
   }, []);
 
+  const handleFolderClick = (children: chrome.bookmarks.BookmarkTreeNode[]) => {
+    setFolderStack((prev) => [...prev, currentNodes || []]);
+    setCurrentNodes(children);
+  };
+
+  const handleBack = () => {
+    setCurrentNodes(folderStack[folderStack.length - 1]);
+    setFolderStack((prev) => prev.slice(0, -1));
+  };
+
   return (
-    <div>
-      <h2>Bookmarks</h2>
+    <div className="max-w-4xl mx-auto">
+      <h2 className="text-xl text-white">Bookmarks</h2>
+      {folderStack.length > 0 && (
+        <button className="p-2 text-white bg-[#23232b] rounded-xl shadow-sm cursor-pointer transition-colors hover:bg-[#2a2a34]" onClick={handleBack}>
+          ← Back
+        </button>
+      )}
       {loading ? (
         <p>Loading bookmarks...</p>
-      ) : bookmarks ? (
-        <BookmarkList nodes={bookmarks} />
+      ) : currentNodes ? (
+        <BookmarkList nodes={currentNodes} onFolderClick={handleFolderClick} />
       ) : (
         <p>No bookmarks found.</p>
       )}
     </div>
-  );
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   );
 }
 

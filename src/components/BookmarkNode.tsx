@@ -1,40 +1,44 @@
+import FaviconOrLetter from "./FaviconOrLetter";
+
 const BookmarkNode = ({
   node,
+  onFolderClick,
 }: {
   node: chrome.bookmarks.BookmarkTreeNode;
+  onFolderClick?: (children: chrome.bookmarks.BookmarkTreeNode[]) => void;
 }) => {
   if (node.url) {
     return (
-      <a
-        href={node.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#f0eff5" }}
-      >
-        {node.title || "(No title)"}
-      </a>
+      <div className="rounded-xl p-5 flex flex-col items-center justify-center min-h-[100px] shadow-sm text-center cursor-default">
+        <FaviconOrLetter url={node.url} size={32} />
+        <a
+          href={node.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[#f0eff5] no-underline mt-2 font-medium text-sm break-words"
+        >
+          {node.title || "(No title)"}
+        </a>
+      </div>
     );
   }
 
+  // Folder
   return (
-    <details open>
-      <summary style={{ fontWeight: "bold" }}>
+    <div
+      className="bg-[#23232b] rounded-xl p-5 flex flex-col items-center justify-center min-h-[100px] shadow-sm text-center cursor-pointer transition-colors hover:bg-[#2a2a34]"
+      onClick={() => onFolderClick && node.children && onFolderClick(node.children)}
+      tabIndex={0}
+      role="button"
+      aria-label={`Open folder ${node.title || "Untitled Folder"}`}
+    >
+      <div className="w-8 h-8 bg-[#444] rounded-lg flex items-center justify-center text-[22px] text-[#f0eff5] mb-2">
+        📁
+      </div>
+      <div className="text-[#f0eff5] font-medium text-sm mt-2 break-words">
         {node.title || "Untitled Folder"}
-      </summary>
-      {node.children && node.children.length > 0 ? (
-        <ul style={{ paddingLeft: "15px", margin: "5px 0" }}>
-          {node.children.map((child) => (
-            <li key={child.id}>
-              <BookmarkNode node={child} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p style={{ margin: "5px 0 0 15px", fontStyle: "italic" }}>
-          Empty folder
-        </p>
-      )}
-    </details>
+      </div>
+    </div>
   );
 };
 

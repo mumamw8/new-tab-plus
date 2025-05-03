@@ -3,15 +3,14 @@ import BookmarkNode from "./BookmarkNode";
 
 const BookmarkList: React.FC<{
   nodes: chrome.bookmarks.BookmarkTreeNode[];
-}> = ({ nodes }) => {
+  onFolderClick?: (children: chrome.bookmarks.BookmarkTreeNode[]) => void;
+}> = ({ nodes, onFolderClick }) => {
   return (
-    <ul style={{ paddingLeft: "15px", margin: 0, listStyleType: "none" }}>
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-6 py-6">
       {nodes.map((node) => (
-        <li key={node.id}>
-          <BookmarkNode node={node} />
-        </li>
+        <BookmarkNode key={node.id} node={node} onFolderClick={onFolderClick} />
       ))}
-    </ul>
+    </div>
   );
 };
 
