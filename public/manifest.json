@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Bookmark Viewer",
+  "name": "Home Safari",
   "version": "1.0",
-  "description": "Displays your Chrome bookmarks in a popup using React.",
+  "description": "Display bookmarks on your homepage.",
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
