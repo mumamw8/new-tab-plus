@@ -10,7 +10,14 @@
     "default_popup": "index.html",
     "default_icon": "icon128.png"
   },
-  "permissions": ["bookmarks", "storage"],
+  "permissions": ["bookmarks", "storage", "favicon"],
+  "web_accessible_resources": [
+    {
+      "resources": ["_favicon/*"],
+      "matches": ["<all_urls>"],
+      "extension_ids": ["*"]
+    }
+  ],
   "icons": {
     "16": "icon16.png",
     "48": "icon48.png",

@@ -6,7 +6,7 @@ const BookmarkList: React.FC<{
   onFolderClick?: (children: chrome.bookmarks.BookmarkTreeNode[]) => void;
 }> = ({ nodes, onFolderClick }) => {
   return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-6 py-6">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-1 py-2">
       {nodes.map((node) => (
         <BookmarkNode key={node.id} node={node} onFolderClick={onFolderClick} />
       ))}
