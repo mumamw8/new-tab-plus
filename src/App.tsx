@@ -3,11 +3,25 @@ import "./App.css";
 import BookmarkList from "./components/BookmarkList";
 
 function App() {
-  const [currentNodes, setCurrentNodes] = useState<chrome.bookmarks.BookmarkTreeNode[]>([]);
-  const [folderStack, setFolderStack] = useState<chrome.bookmarks.BookmarkTreeNode[][]>([]);
+  const [currentNodes, setCurrentNodes] = useState<
+    chrome.bookmarks.BookmarkTreeNode[]
+  >([]);
+  const [folderStack, setFolderStack] = useState<
+    chrome.bookmarks.BookmarkTreeNode[][]
+  >([]);
+  const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // chrome.wallpaper.setWallpaper(
+    //   {
+    //     url: "https://images.unsplash.com/photo-1745750747233-c09276a878b3?q=80&w=2825&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    //     layout: "CENTER_CROPPED",
+    //     filename: "test_wallpaper",
+    //   },
+    //   function () {},
+    // );
+
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
       if (!bookMarkTreeNodes || bookMarkTreeNodes.length === 0) return;
       const root = bookMarkTreeNodes[0];
@@ -16,28 +30,60 @@ function App() {
     });
   }, []);
 
-  const handleFolderClick = (children: chrome.bookmarks.BookmarkTreeNode[]) => {
+  const handleFolderClick = (
+    children: chrome.bookmarks.BookmarkTreeNode[],
+    title: string,
+  ) => {
     setFolderStack((prev) => [...prev, currentNodes || []]);
+    setTitleStack((prev) => [...prev, title]);
     setCurrentNodes(children);
   };
 
   const handleBack = () => {
     setCurrentNodes(folderStack[folderStack.length - 1]);
     setFolderStack((prev) => prev.slice(0, -1));
+    setTitleStack(titleStack.slice(0, -1));
   };
 
+  const renderRootContent = () => {
+    return currentNodes.map((node) => {
+      if (!node.children) return null;
+      return (
+        <div key={node.id} className="mb-2">
+          <BookmarkList
+            nodes={node.children}
+            onFolderClick={handleFolderClick}
+            title={node.title}
+          />
+        </div>
+      );
+    });
+  };
+
+  const currentTitle = titleStack[titleStack.length - 1];
+
   return (
-    <div className="max-w-4xl mx-auto">
-      <h2 className="text-xl text-white">Bookmarks</h2>
+    <div className="max-w-4xl mx-auto mt-12">
       {folderStack.length > 0 && (
-        <button className="p-2 text-white bg-[#23232b] rounded-xl shadow-sm cursor-pointer transition-colors hover:bg-[#2a2a34]" onClick={handleBack}>
+        <button
+          className="p-2 text-white bg-[#23232b] rounded-xl cursor-pointer transition-colors hover:bg-[#2a2a34]"
+          onClick={handleBack}
+        >
           ← Back
         </button>
       )}
       {loading ? (
         <p>Loading bookmarks...</p>
       ) : currentNodes ? (
-        <BookmarkList nodes={currentNodes} onFolderClick={handleFolderClick} />
+        folderStack.length === 0 ? (
+          renderRootContent()
+        ) : (
+          <BookmarkList
+            nodes={currentNodes}
+            onFolderClick={handleFolderClick}
+            title={currentTitle}
+          />
+        )
       ) : (
         <p>No bookmarks found.</p>
       )}
