@@ -9,17 +9,15 @@ const BookmarkNode = ({
 }) => {
   if (node.url) {
     return (
-      <div className="rounded-xl p-5 flex flex-col items-center justify-center min-h-[100px] shadow-sm text-center cursor-default">
+      <a
+        href={node.url}
+        className="rounded-xl p-5 flex flex-col items-center justify-center min-h-[100px] shadow-sm text-center cursor-pointer no-underline group"
+      >
         <FaviconOrLetter url={node.url} size={32} />
-        <a
-          href={node.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-[#f0eff5] no-underline mt-2 font-medium text-sm break-words"
-        >
+        <span className="text-[#f0eff5] mt-2 font-medium text-sm break-words group-hover:underline">
           {node.title || "(No title)"}
-        </a>
-      </div>
+        </span>
+      </a>
     );
   }
 
