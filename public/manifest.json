@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Bookmark Viewer",
+  "version": "1.0",
+  "description": "Displays your Chrome bookmarks in a popup using React.",
+  "permissions": ["bookmarks"],
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": "icon128.png"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
