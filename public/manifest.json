@@ -11,6 +11,10 @@
     "default_icon": "icon128.png"
   },
   "permissions": ["bookmarks", "storage", "favicon"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
   "web_accessible_resources": [
     {
       "resources": ["_favicon/*"],

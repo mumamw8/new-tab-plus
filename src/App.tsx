@@ -13,15 +13,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // chrome.wallpaper.setWallpaper(
-    //   {
-    //     url: "https://images.unsplash.com/photo-1745750747233-c09276a878b3?q=80&w=2825&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    //     layout: "CENTER_CROPPED",
-    //     filename: "test_wallpaper",
-    //   },
-    //   function () {},
-    // );
-
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
       if (!bookMarkTreeNodes || bookMarkTreeNodes.length === 0) return;
       const root = bookMarkTreeNodes[0];
@@ -32,7 +23,7 @@ function App() {
 
   const handleFolderClick = (
     children: chrome.bookmarks.BookmarkTreeNode[],
-    title: string,
+    title: string
   ) => {
     setFolderStack((prev) => [...prev, currentNodes || []]);
     setTitleStack((prev) => [...prev, title]);
