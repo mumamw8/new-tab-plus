@@ -22,6 +22,33 @@ function App() {
     });
   }, []);
 
+  // Set App Background
+  useEffect(() => {
+    // get background color from storage
+    chrome.storage.local.get(["bgType", "color"], (result) => {
+      console.log("Stored Theme info...", result);
+      if (result.bgType === "color") {
+        document.body.style.backgroundColor = result.color;
+        console.log("Background color set to:", result.color);
+      } else if (result.bgType === "image") {
+        document.body.style.backgroundImage = `url(${result.image})`;
+        console.log("Background image set to:", result.image);
+      } else {
+        document.body.style.backgroundColor = "black";
+        chrome.storage.local.get(["bgType", "color"], (result) => {
+          if (!result.bgType) {
+            chrome.storage.local
+              .set({ bgType: "color", color: "black" })
+              .then((result) => {
+                console.log(result);
+                console.log("Default background color set");
+              });
+          }
+        });
+      }
+    });
+  }, []);
+
   const handleFolderClick = (
     children: chrome.bookmarks.BookmarkTreeNode[],
     title: string
