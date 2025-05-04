@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import BookmarkList from "./components/BookmarkList";
+import { CircleChevronLeftIcon } from "lucide-react";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -57,10 +58,10 @@ function App() {
     <div className="max-w-4xl mx-auto pt-14">
       {folderStack.length > 0 && (
         <button
-          className="p-2 text-white bg-[#23232b] rounded-xl cursor-pointer transition-colors hover:bg-[#2a2a34]"
+          className="flex items-center gap-2 text-white font-bold text-lg cursor-pointer mr-10"
           onClick={handleBack}
         >
-          ← Back
+          <CircleChevronLeftIcon className="w-6 h-6" />
         </button>
       )}
       {loading ? (

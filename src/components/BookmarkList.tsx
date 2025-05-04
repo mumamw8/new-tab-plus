@@ -1,5 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import BookmarkNode from "./BookmarkNode";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+
+const NODES_PER_ROW = 11; // Adjust this to match your layout
+const ROWS_TO_SHOW = 2;
+const MAX_NODES = NODES_PER_ROW * ROWS_TO_SHOW;
 
 const BookmarkList: React.FC<{
   nodes: chrome.bookmarks.BookmarkTreeNode[];
@@ -9,11 +14,26 @@ const BookmarkList: React.FC<{
   ) => void;
   title?: string;
 }> = ({ nodes, onFolderClick, title }) => {
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleNodes = showAll ? nodes : nodes.slice(0, MAX_NODES);
+
   return (
     <>
+    <div className="flex items-center justify-between">
       {title && <h2 className="text-lg text-white font-bold">{title}</h2>}
+      {nodes.length > MAX_NODES && (
+        <button
+          className="flex items-center gap-2 text-white font-bold underline cursor-pointer mr-10"
+          onClick={() => setShowAll((prev) => !prev)}
+        >
+          {showAll ? "Show Less" : "Show All"}
+          {showAll ? <ChevronLeftIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+        </button>
+      )}
+    </div>
       <div className="flex flex-wrap gap-2 py-2">
-        {nodes.map((node) => (
+        {visibleNodes.map((node) => (
           <BookmarkNode
             key={node.id}
             node={node}
@@ -21,6 +41,7 @@ const BookmarkList: React.FC<{
           />
         ))}
       </div>
+      
     </>
   );
 };
