@@ -7,9 +7,9 @@
     "newtab": "index.html"
   },
   "action": {
-    "default_popup": "index.html",
     "default_icon": "icon128.png"
   },
+  "options_page": "options.html",
   "permissions": ["bookmarks", "storage", "favicon"],
   "background": {
     "service_worker": "background.js",
