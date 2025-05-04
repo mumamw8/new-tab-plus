@@ -75,7 +75,7 @@ function App() {
         </button> */}
         <details className="dropdown ml-auto">
           <summary className="btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm text-white"><EllipsisIcon className="w-4 h-4" /></summary>
-          <ul className="menu dropdown-content bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
+          <ul className="menu dropdown-content text-white bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
             <li>
               <button
                 onClick={() => {
