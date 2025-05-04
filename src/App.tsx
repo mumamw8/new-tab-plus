@@ -56,14 +56,24 @@ function App() {
 
   return (
     <div className="max-w-4xl mx-auto pt-14">
-      {folderStack.length > 0 && (
+      <div className="flex items-center mb-4">
+        {folderStack.length > 0 && (
+          <button
+            className="flex items-center gap-2 text-white font-bold text-lg cursor-pointer mr-10"
+            onClick={handleBack}
+          >
+            <CircleChevronLeftIcon className="w-6 h-6" />
+          </button>
+        )}
         <button
-          className="flex items-center gap-2 text-white font-bold text-lg cursor-pointer mr-10"
-          onClick={handleBack}
+          className="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+          onClick={() => {
+            chrome.tabs.update({ url: "chrome://bookmarks/" });
+          }}
         >
-          <CircleChevronLeftIcon className="w-6 h-6" />
+          Manage
         </button>
-      )}
+      </div>
       {loading ? (
         <p>Loading bookmarks...</p>
       ) : currentNodes ? (
