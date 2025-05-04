@@ -7,14 +7,19 @@ const BookmarkNode = ({
   node: chrome.bookmarks.BookmarkTreeNode;
   onFolderClick?: (
     children: chrome.bookmarks.BookmarkTreeNode[],
-    title: string,
+    title: string
   ) => void;
 }) => {
-  const baseClasses = `flex flex-col items-center cursor-pointer rounded-xl transition-all duration-200 max-w-28`;
+  const baseClasses = `flex flex-col items-center cursor-pointer rounded-xl transition-all duration-200 w-[72px]`;
 
   if (node.url) {
     return (
-      <a href={node.url} className={baseClasses}>
+      <a
+        href={node.url}
+        className={baseClasses}
+        title={node.title} // Add title attribute
+        aria-label={node.title} // Add aria-label for accessibility
+      >
         <FaviconOrLetter title={node.title} url={node.url} size={64} />
         <span className="text-xs text-[#f0eff5] font-medium text-center w-full truncate">
           {node.title}
@@ -35,6 +40,7 @@ const BookmarkNode = ({
       tabIndex={0}
       role="button"
       aria-label={`Open folder ${node.title || "Untitled Folder"}`}
+      title={node.title || "Untitled Folder"} // Add title attribute
     >
       <div
         className={`relative flex items-center text-2xl justify-center w-16 h-16 mb-2 rounded-2xl bg-white/5 backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`}
