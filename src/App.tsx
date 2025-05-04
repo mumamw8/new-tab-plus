@@ -54,7 +54,7 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-4xl mx-auto mt-12">
+    <div className="max-w-4xl mx-auto pt-14">
       {folderStack.length > 0 && (
         <button
           className="p-2 text-white bg-[#23232b] rounded-xl cursor-pointer transition-colors hover:bg-[#2a2a34]"
