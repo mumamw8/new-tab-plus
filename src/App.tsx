@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import BookmarkList from "./components/BookmarkList";
-import { CircleChevronLeftIcon } from "lucide-react";
+import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -65,14 +65,37 @@ function App() {
             <CircleChevronLeftIcon className="w-6 h-6" />
           </button>
         )}
-        <button
-          className="ml-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
+        {/* <button
+          className="btn btn-primary ml-auto"
           onClick={() => {
             chrome.tabs.update({ url: "chrome://bookmarks/" });
           }}
         >
           Manage
-        </button>
+        </button> */}
+        <details className="dropdown ml-auto">
+          <summary className="btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm text-white"><EllipsisIcon className="w-4 h-4" /></summary>
+          <ul className="menu dropdown-content bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
+            <li>
+              <button
+                onClick={() => {
+                  chrome.tabs.update({ url: "chrome://bookmarks/" });
+                }}
+              >
+                Manage Bookmarks
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={() => {
+                  chrome.runtime.openOptionsPage();
+                }}
+              >
+                Options
+              </button>
+            </li>
+          </ul>
+        </details>
       </div>
       {loading ? (
         <p>Loading bookmarks...</p>
