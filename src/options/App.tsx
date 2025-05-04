@@ -1,14 +1,31 @@
-import { useState } from "react";
+// import { useState } from "react";
+import { useEffect } from "react";
 import "../App.css";
+import ThemeCustomizer from "./components/ThemeCustomizer";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 
-const App = () => {
-  const [bgType, setBgType] = useState<"image" | "color">("image");
-  const [color, setColor] = useState("#23232b");
+const ExtensionOptions = () => {
+  // const [bgType, setBgType] = useState<"image" | "color">("image");
+  // const [color, setColor] = useState("#23232b");
+  const { setBackgroundColor, backgroundColor, textColor } = useTheme();
+
+  useEffect(() => {
+    chrome.storage.local.get(["bgType", "color"], (result) => {
+      if (result.bgType === "color") {
+        setBackgroundColor(result.color);
+        console.log("Background color set to in ExtensionOptions:", result.color);
+      }
+    });
+  }, []);
 
   return (
-    <div className="max-w-4xl text-white mx-auto pt-14">
+    <div 
+      className="min-h-screen w-full flex flex-col items-center transition-colors duration-300 ease-in-out p-4 md:p-8"
+      style={{ backgroundColor: backgroundColor, color: textColor }}
+    >
       <div className="p-6 max-w-md mx-auto bg-white/5 backdrop-blur-sm rounded shadow">
-        <h2 className="text-xl font-bold mb-4">Background Settings</h2>
+        <ThemeCustomizer />
+        {/* <h2 className="text-xl font-bold mb-4">Background Settings</h2>
         <div className="flex items-center gap-6 mb-4">
           <label className="flex items-center gap-2">
             <input
@@ -57,10 +74,18 @@ const App = () => {
                   : color,
             }}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );
 };
+
+function App() {
+  return (
+    <ThemeProvider>
+      <ExtensionOptions />
+    </ThemeProvider>
+  );
+}
 
 export default App;

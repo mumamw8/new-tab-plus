@@ -21,10 +21,10 @@ const BookmarkList: React.FC<{
   return (
     <>
     <div className="flex items-center justify-between">
-      {title && <h2 className="text-lg text-white font-bold">{title}</h2>}
+      {title && <h2 className="text-lg custom-text-color font-bold">{title}</h2>}
       {nodes.length > MAX_NODES && (
         <button
-          className="flex items-center gap-2 text-white font-bold underline cursor-pointer mr-10"
+          className="flex items-center gap-2 custom-text-color font-bold underline cursor-pointer mr-10"
           onClick={() => setShowAll((prev) => !prev)}
         >
           {showAll ? "Show Less" : "Show All"}

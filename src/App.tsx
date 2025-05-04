@@ -24,8 +24,8 @@ function App() {
 
   // Set App Background
   useEffect(() => {
-    // get background color from storage
-    chrome.storage.local.get(["bgType", "color"], (result) => {
+    // get background and text color from storage
+    chrome.storage.local.get(["bgType", "color", "textColor"], (result) => {
       console.log("Stored Theme info...", result);
       if (result.bgType === "color") {
         document.body.style.backgroundColor = result.color;
@@ -45,6 +45,10 @@ function App() {
               });
           }
         });
+      }
+      if (result.textColor) {
+        document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
+        console.log("Text color set to:", result.textColor);
       }
     });
   }, []);
@@ -86,7 +90,7 @@ function App() {
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
-            className="flex items-center gap-2 text-white font-bold text-lg cursor-pointer mr-10"
+            className="flex items-center gap-2 custom-text-color font-bold text-lg cursor-pointer mr-10"
             onClick={handleBack}
           >
             <CircleChevronLeftIcon className="w-6 h-6" />
@@ -102,7 +106,7 @@ function App() {
         </button> */}
         <details className="dropdown ml-auto">
           <summary className="btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm text-white"><EllipsisIcon className="w-4 h-4" /></summary>
-          <ul className="menu dropdown-content text-white bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
+          <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
             <li>
               <button
                 onClick={() => {
