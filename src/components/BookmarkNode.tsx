@@ -21,7 +21,7 @@ const BookmarkNode = ({
         aria-label={node.title} // Add aria-label for accessibility
       >
         <FaviconOrLetter title={node.title} url={node.url} size={64} />
-        <span className="text-xs custom-text-color font-medium text-center w-full truncate">
+        <span className="text-[0.7rem] leading-3 custom-text-color font-medium text-center w-full line-clamp-2">
           {node.title}
         </span>
       </a>
@@ -47,7 +47,7 @@ const BookmarkNode = ({
       >
         📁
       </div>
-      <span className="text-xs custom-text-color font-medium text-center w-full truncate">
+      <span className="text-[0.7rem] leading-3 custom-text-color font-medium text-center w-full line-clamp-2">
         {node.title}
       </span>
     </div>
