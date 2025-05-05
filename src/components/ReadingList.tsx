@@ -11,6 +11,11 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll ? readingList : readingList.slice(0, MAX_ITEMS);
 
+  // Mark item as read when clicked
+  const handleLinkClick = (url: string) => {
+    chrome.runtime.sendMessage(chrome.runtime.id, { action: "updateReadingListItem", item: { url } });
+  };
+
   return (
     <div className="max-w-4xl mx-auto pt-14">
       <div className="flex items-center justify-between mb-6">
@@ -33,6 +38,7 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
             aria-label={item.title}
             key={idx}
             className="relative flex custom-text-color bg-white/10 rounded-xl shadow-md p-4 items-center gap-4"
+            onClick={() => handleLinkClick(item.url)}
           >
             {!item.hasBeenRead && (
               <span

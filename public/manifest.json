@@ -10,7 +10,8 @@
     "default_icon": "icon128.png"
   },
   "options_page": "options.html",
-  "permissions": ["bookmarks", "storage", "favicon", "readingList"],
+  "permissions": ["bookmarks", "storage", "favicon", "readingList", "scripting"],
+  "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
