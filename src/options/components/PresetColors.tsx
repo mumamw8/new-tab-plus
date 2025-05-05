@@ -20,6 +20,10 @@ const presets = [
   { name: 'Fuchsia', color: '#d946ef' },
   { name: 'Pink', color: '#ec4899' },
   { name: 'Rose', color: '#f43f5e' },
+  { name: 'Cool Gray', color: '#f0f0f0' }, // Common light gray
+  { name: 'Light Blue', color: '#e0f7fa' }, // Light blue often seen
+  { name: 'Light Green', color: '#e8f5e9' }, // Light green variant
+  { name: 'Dark Blue Gray', color: '#37474f' }, // Darker, muted tone
 ];
 
 const PresetColors: React.FC = () => {

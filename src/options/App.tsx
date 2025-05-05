@@ -20,10 +20,10 @@ const ExtensionOptions = () => {
 
   return (
     <div 
-      className="min-h-screen w-full flex flex-col items-center transition-colors duration-300 ease-in-out p-4 md:p-8"
+      className="min-h-screen w-full flex flex-col transition-colors duration-300 ease-in-out p-4 md:p-8"
       style={{ backgroundColor: backgroundColor, color: textColor }}
     >
-      <div className="p-6 max-w-md mx-auto bg-white/5 backdrop-blur-sm rounded shadow">
+      <div className="p-6 max-w-md ml-auto bg-white/5 backdrop-blur-sm rounded shadow">
         <ThemeCustomizer />
         {/* <h2 className="text-xl font-bold mb-4">Background Settings</h2>
         <div className="flex items-center gap-6 mb-4">

@@ -72,7 +72,7 @@ function App() {
 
   const renderRootContent = () => {
     return currentNodes.map((node) => {
-      if (!node.children) return null;
+      if (!node.children || node.children.length === 0) return null;
       return (
         <div key={node.id} className="mb-2">
           <BookmarkList

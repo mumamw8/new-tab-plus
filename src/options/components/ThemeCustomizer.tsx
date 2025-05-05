@@ -26,7 +26,7 @@ const ThemeCustomizer: React.FC = () => {
       >
         <div className="flex items-center gap-2">
           <Palette size={18} />
-          <h2 className="font-medium">Theme Customizer</h2>
+          <h2 className="font-medium">Useful New Tab Theme Customizer</h2>
         </div>
         <button
           aria-label={isOpen ? "Collapse panel" : "Expand panel"}
