@@ -7,6 +7,9 @@ type ThemeContextType = {
   setBackgroundColor: (color: string) => void;
   colorHistory: string[];
   clearHistory: () => void;
+  isAutoTextColor: boolean;
+  setIsAutoTextColor: (value: boolean) => void;
+  setManualTextColor: (color: string) => void;
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -36,9 +39,25 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
     return savedColor;
   });
+
+  const [isAutoTextColor, setIsAutoTextColor] = useState<boolean>(() => {
+    // const saved = localStorage.getItem('isAutoTextColor');
+    // return saved === null ? true : saved === 'true';
+    let returnValue = true;
+    chrome.storage.local.get("isAutoTextColor", (result) => {
+      returnValue = !result.isAutoTextColor ? true : result.isAutoTextColor === 'true';
+    });
+    return returnValue;
+  });
   
   const [textColor, setTextColor] = useState<string>(() => {
-    return calculateTextColor(backgroundColor);
+    let returnColor = calculateTextColor(backgroundColor);
+    chrome.storage.local.get("textColor", (result) => {
+      if (!isAutoTextColor && result.textColor) {
+        returnColor = result.textColor;
+      }
+    });
+    return returnColor;
   });
   
   const [colorHistory, setColorHistory] = useState<string[]>(() => {
@@ -48,7 +67,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Update text color when background changes and set background color in storage
   useEffect(() => {
-    setTextColor(calculateTextColor(backgroundColor));
+    if (isAutoTextColor) {
+      setTextColor(calculateTextColor(backgroundColor));
+    }
     // Save to localStorage
     localStorage.setItem('themeBackgroundColor', backgroundColor);
     
@@ -64,10 +85,15 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     chrome.storage.local.set({ textColor: textColor });
     console.log("Text color set to in ThemeContext:", textColor);
     console.log("Background color set to in ThemeContext:", backgroundColor);
-  }, [backgroundColor, colorHistory, textColor]);
+  }, [backgroundColor, colorHistory, textColor, isAutoTextColor]);
 
   const setBackgroundColor = (color: string) => {
     setBackgroundColorState(color);
+  };
+
+  const setManualTextColor = (color: string) => {
+    setTextColor(color);
+    chrome.storage.local.set({ textColor: color });
   };
 
   const clearHistory = () => {
@@ -82,7 +108,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         textColor, 
         setBackgroundColor,
         colorHistory,
-        clearHistory
+        clearHistory,
+        isAutoTextColor,
+        setIsAutoTextColor,
+        setManualTextColor
       }}
     >
       {children}

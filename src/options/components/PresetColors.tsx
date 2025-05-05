@@ -1,109 +1,96 @@
-import React, { useState, useRef } from 'react';
-import { Moon, Sun, Copy, Check } from 'lucide-react';
+import React from 'react';
 import { useTheme } from '../contexts/ThemeContext';
-import { hexToRgb } from '../utils/colorUtils';
 
-const ColorPicker: React.FC = () => {
-  const { backgroundColor, textColor, setBackgroundColor } = useTheme();
-  const [format, setFormat] = useState<'hex' | 'rgb'>('hex');
-  const [copied, setCopied] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const colorInputRef = useRef<HTMLInputElement>(null);
-  
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBackgroundColor(e.target.value);
-  };
-  
-  const handleColorClick = () => {
-    if (colorInputRef.current) {
-      colorInputRef.current.click();
-    }
-  };
-  
-  const toggleColorFormat = () => {
-    setFormat(prev => prev === 'hex' ? 'rgb' : 'hex');
-  };
-  
-  const toggleDarkMode = () => {
-    setIsDarkMode(prev => !prev);
-    setBackgroundColor(isDarkMode ? '#f3f4f6' : '#121212');
-  };
-  
-  const copyToClipboard = () => {
-    const colorValue = format === 'hex' ? backgroundColor : hexToRgb(backgroundColor);
-    navigator.clipboard.writeText(colorValue);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-  
-  const displayColor = format === 'hex' ? backgroundColor : hexToRgb(backgroundColor);
+const presets = [
+  { name: 'Slate', color: '#64748b' },
+  { name: 'Red', color: '#ef4444' },
+  { name: 'Orange', color: '#f97316' },
+  { name: 'Amber', color: '#f59e0b' },
+  { name: 'Yellow', color: '#eab308' },
+  { name: 'Lime', color: '#84cc16' },
+  { name: 'Green', color: '#22c55e' },
+  { name: 'Emerald', color: '#10b981' },
+  { name: 'Teal', color: '#14b8a6' },
+  { name: 'Cyan', color: '#06b6d4' },
+  { name: 'Sky', color: '#0ea5e9' },
+  { name: 'Blue', color: '#3b82f6' },
+  { name: 'Indigo', color: '#6366f1' },
+  { name: 'Violet', color: '#8b5cf6' },
+  { name: 'Purple', color: '#a855f7' },
+  { name: 'Fuchsia', color: '#d946ef' },
+  { name: 'Pink', color: '#ec4899' },
+  { name: 'Rose', color: '#f43f5e' },
+];
+
+const PresetColors: React.FC = () => {
+  const { backgroundColor, textColor, setBackgroundColor, colorHistory, clearHistory } = useTheme();
   
   return (
-    <div 
-      className="flex flex-col items-center p-6 rounded-xl"
-      style={{ color: textColor, transition: 'color 0.3s ease' }}
-    >
-      <div className="w-full flex justify-between items-center mb-6">
-        <h2 className="text-xl font-medium">Color Picker</h2>
-        <button 
-          onClick={toggleDarkMode}
-          className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition duration-300"
-          style={{ color: textColor }}
-          aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-        >
-          {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-      </div>
-      
-      <div className="relative w-full mb-6">
-        <div 
-          className="w-full h-16 rounded-lg cursor-pointer flex items-center justify-center border border-black/10"
-          style={{ 
-            backgroundColor, 
-            color: textColor,
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-            transition: 'background-color 0.3s ease, color 0.3s ease'
-          }}
-          onClick={handleColorClick}
-        >
-          <span className="font-mono tracking-wide text-sm">
-            {displayColor}
-          </span>
-          <input 
-            ref={colorInputRef}
-            type="color" 
-            value={backgroundColor}
-            onChange={handleColorChange}
-            className="opacity-0 absolute inset-0 w-full h-full cursor-pointer"
-            aria-label="Select color"
-          />
+    <div className="w-full" style={{ color: textColor }}>
+      <div className="mb-4">
+        <h3 className="text-sm font-medium mb-2">Preset Colors</h3>
+        <div className="grid grid-cols-6 gap-2">
+          {presets.map((preset) => (
+            <button
+              key={preset.color}
+              onClick={() => setBackgroundColor(preset.color)}
+              className="w-full aspect-square rounded-md transition-transform hover:scale-105 relative"
+              style={{ 
+                backgroundColor: preset.color,
+                border: backgroundColor === preset.color ? `2px solid ${textColor}` : '2px solid transparent',
+                transform: backgroundColor === preset.color ? 'scale(1.05)' : 'scale(1)',
+              }}
+              aria-label={`Set color to ${preset.name}`}
+              title={preset.name}
+            >
+              {backgroundColor === preset.color && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: textColor }}></span>
+                </span>
+              )}
+            </button>
+          ))}
         </div>
       </div>
       
-      <div className="w-full flex justify-between items-center mb-4">
-        <button 
-          onClick={toggleColorFormat}
-          className="px-3 py-1.5 text-sm rounded-md transition duration-300"
-          style={{ 
-            backgroundColor: `${format === 'hex' ? 'rgba(0,0,0,0.1)' : 'transparent'}`,
-            color: textColor 
-          }}
-        >
-          Toggle {format === 'hex' ? 'RGB' : 'HEX'}
-        </button>
-        
-        <button 
-          onClick={copyToClipboard}
-          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-md transition duration-300 hover:bg-black/10 dark:hover:bg-white/10"
-          style={{ color: textColor }}
-          aria-label={copied ? "Copied!" : "Copy color value"}
-        >
-          {copied ? <Check size={16} /> : <Copy size={16} />}
-          {copied ? 'Copied!' : 'Copy'}
-        </button>
-      </div>
+      {colorHistory.length > 0 && (
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-sm font-medium">Recent Colors</h3>
+            <button 
+              onClick={clearHistory}
+              className="text-xs px-2 py-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition"
+              style={{ color: textColor }}
+            >
+              Clear
+            </button>
+          </div>
+          <div className="grid grid-cols-6 gap-2">
+            {colorHistory.map((color) => (
+              <button
+                key={color}
+                onClick={() => setBackgroundColor(color)}
+                className="w-full aspect-square rounded-md transition-transform hover:scale-105"
+                style={{ 
+                  backgroundColor: color,
+                  border: backgroundColor === color ? `2px solid ${textColor}` : '2px solid transparent',
+                  transform: backgroundColor === color ? 'scale(1.05)' : 'scale(1)',
+                }}
+                aria-label={`Set color to ${color}`}
+                title={color}
+              >
+                {backgroundColor === color && (
+                  <span className="absolute inset-0 flex items-center justify-center">
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: textColor }}></span>
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ColorPicker;
+export default PresetColors;
