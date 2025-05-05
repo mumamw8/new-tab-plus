@@ -15,7 +15,7 @@ export const calculateTextColor = (backgroundColor: string): string => {
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
 
   // Return black or white based on brightness
-  return yiq >= 128 ? "#1a1a1a" : "#ffffff";
+  return yiq >= 128 ? "#151516" : "#ffffff";
 };
 
 /**

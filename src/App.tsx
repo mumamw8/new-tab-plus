@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
+import ReadingList from "./components/ReadingList";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -13,6 +14,7 @@ function App() {
   const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [textColor, setTextColor] = useState<string>("#ffffff");
+  const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -22,6 +24,15 @@ function App() {
       setLoading(false);
     });
   }, []);
+
+  async function fetchReadingList() {
+    const items = await chrome.readingList.query({});
+    setReadingList(items);
+  }
+  // Get Reading List
+  useEffect(() => {
+    fetchReadingList();
+  }, [])
 
   // Set App Background
   useEffect(() => {
@@ -88,7 +99,7 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-4xl mx-auto pt-14">
+    <div className="max-w-4xl px-4 lg:px-0 mx-auto pt-14 pb-52">
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
@@ -145,6 +156,7 @@ function App() {
       ) : (
         <p>No bookmarks found.</p>
       )}
+      {readingList.length > 0 && <ReadingList readingList={readingList} />}
     </div>
   );
 }
