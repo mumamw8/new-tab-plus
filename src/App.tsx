@@ -26,7 +26,7 @@ function App() {
   }, []);
 
   async function fetchReadingList() {
-    const items = await chrome.readingList.query({});
+    const items = await chrome.readingList.query({ hasBeenRead: false });
     setReadingList(items);
   }
   // Get Reading List
@@ -40,13 +40,16 @@ function App() {
     chrome.storage.local.get(["bgType", "color", "textColor"], (result) => {
       console.log("Stored Theme info...", result);
       if (result.bgType === "color") {
-        document.body.style.backgroundColor = result.color;
+        // document.body.style.backgroundColor = result.color;
+        document.body.style.setProperty('--custom-background-color', result.color, 'important');
         console.log("Background color set to:", result.color);
       } else if (result.bgType === "image") {
-        document.body.style.backgroundImage = `url(${result.image})`;
+        // document.body.style.backgroundImage = `url(${result.image})`;
+        document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
         console.log("Background image set to:", result.image);
       } else {
-        document.body.style.backgroundColor = "black";
+        // document.body.style.backgroundColor = "black";
+        document.body.style.setProperty('--custom-background-color', "black", 'important');
         chrome.storage.local.get(["bgType", "color"], (result) => {
           if (!result.bgType) {
             chrome.storage.local
@@ -62,6 +65,10 @@ function App() {
         setTextColor(result.textColor);
         document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
         console.log("Text color set to:", result.textColor);
+      } else {
+        setTextColor("#ffffff");
+        document.body.style.setProperty('--custom-text-color', "#ffffff", 'important');
+        console.log("Text color set to:", "#ffffff");
       }
     });
   }, []);

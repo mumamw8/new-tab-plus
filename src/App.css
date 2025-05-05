@@ -10,6 +10,7 @@ body {
   min-height: 100vh;
   position: relative;
   color: var(--custom-text-color);
+  background-color: var(--custom-background-color);
 }
 
 /* body::before {
