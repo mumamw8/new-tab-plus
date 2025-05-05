@@ -12,6 +12,7 @@ function App() {
   >([]);
   const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [textColor, setTextColor] = useState<string>("#ffffff");
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -47,6 +48,7 @@ function App() {
         });
       }
       if (result.textColor) {
+        setTextColor(result.textColor);
         document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
         console.log("Text color set to:", result.textColor);
       }
@@ -105,7 +107,7 @@ function App() {
           Manage
         </button> */}
         <details className="dropdown ml-auto">
-          <summary className="btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm text-white"><EllipsisIcon className="w-4 h-4" /></summary>
+          <summary className={`btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm ${textColor === "#ffffff" ? "text-white" : "text-gray-900"}`}><EllipsisIcon className="w-4 h-4" /></summary>
           <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
             <li>
               <button

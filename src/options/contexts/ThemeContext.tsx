@@ -62,8 +62,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     // Save to storage
     chrome.storage.local.set({ bgType: "color", color: backgroundColor });
     chrome.storage.local.set({ textColor: textColor });
+    console.log("Text color set to in ThemeContext:", textColor);
     console.log("Background color set to in ThemeContext:", backgroundColor);
-  }, [backgroundColor, colorHistory]);
+  }, [backgroundColor, colorHistory, textColor]);
 
   const setBackgroundColor = (color: string) => {
     setBackgroundColorState(color);
