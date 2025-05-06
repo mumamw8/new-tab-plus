@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import BookmarkNode from "./BookmarkNode";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-const NODES_PER_ROW = 5.5; // Adjust this to match your layout
+const NODES_PER_ROW = 4; // Adjust this to match your layout
 const ROWS_TO_SHOW = 2;
 const MAX_NODES = NODES_PER_ROW * ROWS_TO_SHOW;
 

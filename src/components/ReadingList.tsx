@@ -17,7 +17,7 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
   };
 
   return (
-    <div className="w-full pt-14">
+    <div className="w-full pt-10">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold custom-text-color">Reading List</h2>
         {readingList.length > MAX_ITEMS && (

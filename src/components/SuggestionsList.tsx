@@ -38,7 +38,7 @@ const SuggestionsList: React.FC = () => {
   }
 
   return (
-    <div className="w-full pt-14">
+    <div className="w-full pt-10">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold custom-text-color">Suggestions</h2>
       </div>
