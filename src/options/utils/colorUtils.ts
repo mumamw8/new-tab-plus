@@ -101,5 +101,5 @@ export const calculateImageBrightness = (image: HTMLImageElement): number => {
 };
 
 export const getTextColorForBrightness = (brightness: number): string => {
-  return brightness >= 128 ? "#151516" : "#ffffff";
+  return brightness < 128 ? "#151516" : "#ffffff";
 };

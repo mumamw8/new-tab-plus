@@ -45,8 +45,8 @@ function App() {
       const textColor: string = getTextColorForBrightness(brightness);
       console.log("Brightness:", brightness);
       console.log("Text color:", textColor);
-      setTextColor(textColor);
-      document.body.style.setProperty('--custom-text-color', textColor, 'important');
+      setTextColor('#ffffff');
+      document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
       // setTextColor(textColor);
     };
 
@@ -71,6 +71,7 @@ function App() {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
         // document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
+        document.body.classList.add('custom-opaque-background-color-class');
         document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
         console.log("Background image set to:", result.image);
       } else {
@@ -158,60 +159,62 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-8 pb-52 max-h-screen overflow-y-auto">
-      <div className="flex items-center mb-4">
-        {folderStack.length > 0 && (
-          <button
-            className="flex items-center gap-2 opacity-70 font-bold text-lg cursor-pointer mr-10"
-            onClick={handleBack}
-          >
-            <CircleChevronLeftIcon color={textColor} className="w-6 h-6" />
-          </button>
-        )}
+    <div className="max-h-screen overflow-y-auto scroll-smooth">
+      <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-8 pb-52">
+        <div className="flex items-center mb-4">
+          {folderStack.length > 0 && (
+            <button
+              className="flex items-center gap-2 opacity-70 font-bold text-lg cursor-pointer mr-10"
+              onClick={handleBack}
+            >
+              <CircleChevronLeftIcon color={textColor} className="w-6 h-6" />
+            </button>
+          )}
 
-        <details className="dropdown ml-auto">
-          <summary className={`btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm custom-text-color`}><EllipsisIcon color={textColor} className="w-4 h-4" /></summary>
-          <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
-            <li>
-              <button
-                onClick={() => {
-                  chrome.tabs.update({ url: "chrome://bookmarks/" });
-                }}
-              >
-                Manage Bookmarks
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => {
-                  chrome.runtime.openOptionsPage();
-                }}
-              >
-                Options
-              </button>
-            </li>
-          </ul>
-        </details>
-      </div>
-      <div className="flex flex-col gap-2 group">
-        {loading ? (
-          <p>Loading bookmarks...</p>
-        ) : currentNodes ? (
-          folderStack.length === 0 ? (
-            renderRootContent()
+          <details className="dropdown ml-auto">
+            <summary className={`btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm custom-text-color`}><EllipsisIcon color={textColor} className="w-4 h-4" /></summary>
+            <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
+              <li>
+                <button
+                  onClick={() => {
+                    chrome.tabs.update({ url: "chrome://bookmarks/" });
+                  }}
+                >
+                  Manage Bookmarks
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => {
+                    chrome.runtime.openOptionsPage();
+                  }}
+                >
+                  Options
+                </button>
+              </li>
+            </ul>
+          </details>
+        </div>
+        <div className="flex flex-col gap-2 group">
+          {loading ? (
+            <p>Loading bookmarks...</p>
+          ) : currentNodes ? (
+            folderStack.length === 0 ? (
+              renderRootContent()
+            ) : (
+              <BookmarkList
+                nodes={currentNodes}
+                onFolderClick={handleFolderClick}
+                title={currentTitle}
+              />
+            )
           ) : (
-            <BookmarkList
-              nodes={currentNodes}
-              onFolderClick={handleFolderClick}
-              title={currentTitle}
-            />
-          )
-        ) : (
-          <p>No bookmarks found.</p>
-        )}
+            <p>No bookmarks found.</p>
+          )}
+        </div>
+        {visibilitySettings.suggestionsList && <SuggestionsList />}
+        {visibilitySettings.readingList && <ReadingList />}
       </div>
-      {visibilitySettings.suggestionsList && <SuggestionsList />}
-      {visibilitySettings.readingList && <ReadingList />}
     </div>
   );
 }

@@ -13,7 +13,7 @@ body {
   color: var(--custom-text-color);
 }
 
-.custom-opaque-background-color::before {
+.custom-opaque-background-color-class::before {
   content: "";
   position: fixed; /* covers viewport even when scrolling */
   top: 0;
@@ -25,7 +25,7 @@ body {
   pointer-events: none; /* allows clicks through overlay */
 }
 
-.custom-opaque-background-color {
+.custom-opaque-background-color-class {
   background-color: var(--custom-background-color);
 }
 
