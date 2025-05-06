@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
 import ItemsThemeSelector from "./ItemsThemeSelector";
 
-const BackgroundSettings = () => {
+const ExtraOptions = () => {
   const { textColor } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
   const [bgType, setBgType] = useState<"image" | "color">("color");
@@ -78,4 +78,4 @@ const BackgroundSettings = () => {
   )
 };
 
-export default BackgroundSettings;
+export default ExtraOptions;
