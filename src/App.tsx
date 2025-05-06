@@ -4,7 +4,7 @@ import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
-import { VisibilitySettings } from "./options/components/ExtensionSettings";
+import { VisibilitySettingsType } from "./options/components/ExtensionSettings";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -16,7 +16,7 @@ function App() {
   const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [textColor, setTextColor] = useState<string>("#ffffff");
-  const [visibilitySettings, setVisibilitySettings] = useState<VisibilitySettings>({
+  const [visibilitySettings, setVisibilitySettings] = useState<VisibilitySettingsType>({
     readingList: true,
     suggestionsList: true
   });
