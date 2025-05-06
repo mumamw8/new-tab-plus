@@ -4,6 +4,8 @@ import { getDomain } from "../utils";
 import { formatDistance } from "date-fns";
 import { ChevronRightIcon } from "lucide-react";
 import { ChevronLeftIcon } from "lucide-react";
+import clsx from "clsx";
+import useCardStyle from "../hooks/useCardStyle";
 
 const MAX_ITEMS = 6;
 
@@ -11,6 +13,7 @@ const ReadingList: React.FC = () => {
   const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [getUnreadOnly, setGetUnreadOnly] = useState(true);
+  const cardStyle = useCardStyle();
   const visibleItems = showAll ? readingList : readingList.slice(0, MAX_ITEMS);
 
   // Mark item as read when clicked
@@ -62,7 +65,12 @@ const ReadingList: React.FC = () => {
             title={item.title}
             aria-label={item.title}
             key={idx}
-            className="relative flex custom-text-color bg-white/5 backdrop-blur-sm rounded-xl shadow-md p-2 items-center gap-4"
+            className={clsx(
+              "relative flex custom-text-color backdrop-blur-sm rounded-xl shadow-md p-2 items-center gap-4",
+              cardStyle === 'neutral' && 'bg-white/5',
+              cardStyle === 'light' && 'bg-white/20',
+              cardStyle === 'dark' && 'bg-gray-900/20'
+            )}
             onClick={() => handleLinkClick(item.url)}
           >
             {!item.hasBeenRead && (
@@ -78,7 +86,6 @@ const ReadingList: React.FC = () => {
               </div>
               <div className="text-xs w-full truncate mb-1 custom-text-color">{getDomain(item.url)}</div>
               <div className="text-xs custom-text-color">
-                {/* Added: {new Date(item.creationTime).toLocaleDateString()} */}
                 {formatDistance(new Date(item.creationTime), new Date(), { addSuffix: true })}
               </div>
             </div>

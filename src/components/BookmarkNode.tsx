@@ -1,4 +1,6 @@
+import clsx from "clsx";
 import FaviconOrLetter from "./FaviconOrLetter";
+import useCardStyle from "../hooks/useCardStyle";
 
 const BookmarkNode = ({
   node,
@@ -10,6 +12,7 @@ const BookmarkNode = ({
     title: string
   ) => void;
 }) => {
+  const cardStyle = useCardStyle();
   const baseClasses = `flex flex-col items-center cursor-pointer rounded-xl transition-all duration-200 w-[72px]`;
 
   if (node.url) {
@@ -43,7 +46,12 @@ const BookmarkNode = ({
       title={node.title || "Untitled Folder"} // Add title attribute
     >
       <div
-        className={`relative flex items-center text-2xl justify-center w-16 h-16 mb-2 rounded-2xl bg-white/5 backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`}
+        className={clsx(
+          `relative flex items-center text-2xl justify-center w-16 h-16 mb-2 rounded-2xl backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`,
+          cardStyle === 'neutral' && 'bg-white/5',
+          cardStyle === 'light' && 'bg-white/20',
+          cardStyle === 'dark' && 'bg-gray-900/20'
+        )}
       >
         📁
       </div>

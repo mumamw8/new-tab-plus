@@ -8,9 +8,12 @@ import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./optio
 import { calculateImageBrightness, getTextColorForBrightness } from "./options/utils/colorUtils";
 import { getImageUrl } from "./utils";
 import useSystemTheme from "./hooks/useSystemTheme";
+import useCardStyle from "./hooks/useCardStyle";
+import clsx from "clsx";
 
 function App() {
   const systemTheme = useSystemTheme();
+  const cardStyle = useCardStyle();
 
   const [currentNodes, setCurrentNodes] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
@@ -184,8 +187,18 @@ function App() {
           )}
 
           <details className="dropdown ml-auto">
-            <summary className={`btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm custom-text-color`}><EllipsisIcon color={textColor} className="w-4 h-4" /></summary>
-            <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">
+            <summary className={clsx(`btn btn-link btn-circle btn-sm hover:backdrop-blur-sm custom-text-color`,
+              cardStyle === 'neutral' && 'hover:bg-white/5',
+              cardStyle === 'light' && 'hover:bg-white/20',
+              cardStyle === 'dark' && 'hover:bg-gray-900/20'
+            )}>
+              <EllipsisIcon color={textColor} className="w-4 h-4" />
+            </summary>
+            <ul className={clsx("menu dropdown-content custom-text-color backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm",
+              cardStyle === 'neutral' && 'bg-white/5',
+              cardStyle === 'light' && 'bg-white/20',
+              cardStyle === 'dark' && 'bg-gray-900/20'
+            )}>
               <li>
                 <button
                   onClick={() => {

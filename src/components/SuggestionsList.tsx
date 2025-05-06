@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { faviconURL, faviconURLFromChrome } from "../utils";
+import clsx from "clsx";
+import useCardStyle from "../hooks/useCardStyle";
 
 function sortHistoryItemsByTypedCount(historyItems: chrome.history.HistoryItem[]): chrome.history.HistoryItem[] {
   // Filter out items with no typedCount or typedCount of 0
@@ -19,6 +21,7 @@ function sortHistoryItemsByTypedCount(historyItems: chrome.history.HistoryItem[]
 
 const SuggestionsList: React.FC = () => {
   const [history, setHistory] = useState<chrome.history.HistoryItem[]>([]);
+  const cardStyle = useCardStyle();
 
   useEffect(() => {
     // To look for history items visited in the last week,
@@ -49,7 +52,12 @@ const SuggestionsList: React.FC = () => {
             title={item.title}
             aria-label={item.title}
             key={idx}
-            className="relative flex custom-text-color bg-white/5 backdrop-blur-sm rounded-xl shadow-md p-4 items-center gap-4"
+            className={clsx(
+              "relative flex custom-text-color backdrop-blur-sm rounded-xl shadow-md p-4 items-center gap-4",
+              cardStyle === 'neutral' && 'bg-white/5',
+              cardStyle === 'light' && 'bg-white/20',
+              cardStyle === 'dark' && 'bg-gray-900/20'
+            )}
           >
             {item.url && <Favicon url={item.url} iconSize="32" size={16} />}
             <span className="custom-text-color text-[0.9rem] font-semibold truncate w-full">{item.title && item.title.length > 0 ? item.title : item.url}</span>

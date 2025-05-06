@@ -3,6 +3,7 @@ import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTheme } from "../contexts/ThemeContext";
+import ItemsThemeSelector from "./ItemsThemeSelector";
 
 const BackgroundSettings = () => {
   const { textColor } = useTheme();
@@ -26,7 +27,7 @@ const BackgroundSettings = () => {
 
   return (
     <div 
-      className="w-80 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out shadow-xl flex flex-col gap-4"
+      className="w-90 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out shadow-xl flex flex-col gap-4"
       style={{ 
         backgroundColor: `${textColor === '#ffffff' ? 'rgba(40, 40, 40, 0.85)' : 'rgba(255, 255, 255, 0.85)'}`,
         backdropFilter: 'blur(12px)',
@@ -42,7 +43,7 @@ const BackgroundSettings = () => {
       >
         <div className="flex items-center gap-2">
           <WallpaperIcon className="w-4 h-4" />
-          <h2 className="font-medium">Background Settings</h2>
+          <h2 className="font-medium">Extra Options</h2>
         </div>
         <button
           aria-label={isOpen ? "Collapse panel" : "Expand panel"}
@@ -52,9 +53,10 @@ const BackgroundSettings = () => {
         </button>
       </div>
       <div className="p-4 overflow-y-auto max-h-[calc(80vh-48px)]">
-        <div className="w-full">
+        <div className="w-full flex flex-col gap-2">
+          <span className="text-xs font-medium">Background Style</span>
           <div className="flex flex-col rounded-lg justify-center gap-2 p-2" style={{ backgroundColor: `${textColor}10` }}>
-            <span className="font-semibold custom-text-color">Background Image {bgType === "image" ? "On" : "Off"}</span>
+            <span className="custom-text-color">Background Images {bgType === "image" ? "On" : "Off"}</span>
             <button
               className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
                 bgType === "image" ? "bg-blue-500" : "bg-gray-400"
@@ -68,11 +70,8 @@ const BackgroundSettings = () => {
               />
             </button>
           </div>
-          {/* <div className="text-xs mt-2 custom-text-color">
-            {bgType === "image"
-              ? "Background image is enabled."
-              : "Background color is enabled."}
-          </div> */}
+          <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
+          <ItemsThemeSelector initialTheme="neutral" />
         </div>
       </div>
     </div>
