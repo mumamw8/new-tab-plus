@@ -158,7 +158,7 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-8 pb-52">
+    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-8 pb-52 max-h-screen overflow-y-auto">
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
