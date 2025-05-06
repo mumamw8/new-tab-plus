@@ -44,6 +44,8 @@ function App() {
       const textColor: string = getTextColorForBrightness(brightness);
       console.log("Brightness:", brightness);
       console.log("Text color:", textColor);
+      setTextColor(textColor);
+      document.body.style.setProperty('--custom-text-color', textColor, 'important');
       // setTextColor(textColor);
     };
 
@@ -66,9 +68,8 @@ function App() {
       } else if (result.bgType === "image") {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
-        document.body.style.setProperty('--custom-background-image', `url(${'/background-18_x2060.jpg'})`, 'important');
+        document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
         console.log("Background image set to:", result.image);
-        handleGetImageBrightness('/background-18_x2060.jpg');
       } else {
         // set background image to none
         document.body.style.setProperty('--custom-background-image', 'none', 'important');
@@ -85,10 +86,12 @@ function App() {
           }
         });
       }
-      if (result.textColor) {
+      if (result.textColor && result.bgType === "color") {
         setTextColor(result.textColor);
         document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
         console.log("Text color set to:", result.textColor);
+      } else if (result.bgType === "image") {
+        handleGetImageBrightness('/background-15_x1032.jpg');
       } else {
         setTextColor("#ffffff");
         document.body.style.setProperty('--custom-text-color', "#ffffff", 'important');

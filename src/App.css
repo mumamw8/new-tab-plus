@@ -13,16 +13,20 @@ body {
   color: var(--custom-text-color);
 }
 
-body::before {
+.custom-opaque-background-color::before {
   content: "";
   position: fixed; /* covers viewport even when scrolling */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* black overlay, adjust opacity as needed */
+  background: var(--custom-opaque-color); /* overlay, adjust opacity as needed */
   z-index: 0; /* stays behind content */
   pointer-events: none; /* allows clicks through overlay */
+}
+
+.custom-opaque-background-color {
+  background-color: var(--custom-background-color);
 }
 
 #root {
