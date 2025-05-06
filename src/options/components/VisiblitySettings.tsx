@@ -16,6 +16,16 @@ const VisibilitySettings: React.FC = () => {
   const [rootNodesVisibilitySettings, setRootNodesVisibilitySettings] = useState<RootNodesVisibilitySettingsType>({});
   const [rootNodeIds, setRootNodeIds] = useState<string[]>([]);
   const [rootNodesTitleDictionary, setRootNodesTitleDictionary] = useState<RootNodesTitleDictionaryType>({});
+  const [showReadingListButton, setShowReadingListButton] = useState(true);
+
+  async function fetchReadingList() {
+    const items = await chrome.readingList.query({ hasBeenRead: undefined });
+    if (items.length > 0) {
+      setShowReadingListButton(true);
+    } else {
+      setShowReadingListButton(false);
+    }
+  }
 
   const toggleVisibility = (section: keyof VisibilitySettingsType) => {
     setVisibilitySettings(prev => ({
@@ -69,6 +79,7 @@ const VisibilitySettings: React.FC = () => {
   }, [rootNodeIds, rootNodeIds.length]);
 
   useEffect(() => {
+    fetchReadingList();
     // Get or Initialize Visibility Settings
     chrome.storage.local.get(["visibilitySettings"], (result) => {
       if (result.visibilitySettings) {
@@ -139,18 +150,20 @@ const VisibilitySettings: React.FC = () => {
         </button>
 
         {/* Reading List Button */}
-        <button
-          onClick={() => toggleVisibility('readingList')}
-          className="w-full cursor-pointer flex items-center justify-between p-2 rounded-lg transition-colors duration-200 hover:bg-black/10 dark:hover:bg-white/10"
-          style={{ backgroundColor: `${textColor}10` }}
+        {showReadingListButton && (
+          <button
+            onClick={() => toggleVisibility('readingList')}
+            className="w-full cursor-pointer flex items-center justify-between p-2 rounded-lg transition-colors duration-200 hover:bg-black/10 dark:hover:bg-white/10"
+            style={{ backgroundColor: `${textColor}10` }}
         >
           <span>Reading List</span>
           {visibilitySettings.readingList ? (
             <Eye size={18} />
           ) : (
             <EyeOff size={18} />
-          )}
-        </button>
+            )}
+          </button>
+        )}
       </div>
     </div>
   );
