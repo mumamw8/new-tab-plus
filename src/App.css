@@ -3,14 +3,14 @@
 } */
 
 body {
-  /* background-image: url('/background-8_x1386.jpg'); */
+  background-image: var(--custom-background-image, none);
+  background-color: var(--custom-background-color);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   min-height: 100vh;
   position: relative;
   color: var(--custom-text-color);
-  background-color: var(--custom-background-color);
 }
 
 /* body::before {

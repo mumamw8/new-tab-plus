@@ -1,9 +1,9 @@
-// import { useState } from "react";
 import { useEffect } from "react";
 import "../App.css";
 import ThemeCustomizer from "./components/ThemeCustomizer";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ExtensionSettings from "./components/ExtensionSettings";
+import BackgroundSettings from "./components/BackgroundSettings";
 
 const ExtensionOptions = () => {
   // const [bgType, setBgType] = useState<"image" | "color">("image");
@@ -31,6 +31,10 @@ const ExtensionOptions = () => {
         </div>
         <div className="p-6 max-w-md bg-white/5 backdrop-blur-sm rounded shadow mb-6">
           <ThemeCustomizer />
+        </div>
+        {/* New Background Image Toggle Container */}
+        <div className="p-6 max-w-md bg-white/5 backdrop-blur-sm rounded shadow mb-6">
+          <BackgroundSettings />
         </div>
       </div>
     </div>

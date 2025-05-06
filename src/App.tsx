@@ -41,11 +41,16 @@ function App() {
         // document.body.style.backgroundColor = result.color;
         document.body.style.setProperty('--custom-background-color', result.color, 'important');
         console.log("Background color set to:", result.color);
+        // set background image to none
+        document.body.style.setProperty('--custom-background-image', 'none', 'important');
       } else if (result.bgType === "image") {
         // document.body.style.backgroundImage = `url(${result.image})`;
-        document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
+        // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
+        document.body.style.setProperty('--custom-background-image', `url(${'/background-8_x1386.jpg'})`, 'important');
         console.log("Background image set to:", result.image);
       } else {
+        // set background image to none
+        document.body.style.setProperty('--custom-background-image', 'none', 'important');
         // document.body.style.backgroundColor = "black";
         document.body.style.setProperty('--custom-background-color', "#3c3c3c", 'important');
         chrome.storage.local.get(["bgType", "color"], (result) => {
