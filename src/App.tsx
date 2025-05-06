@@ -6,6 +6,7 @@ import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
 import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
 import { calculateImageBrightness, getTextColorForBrightness } from "./options/utils/colorUtils";
+import { getImageUrl } from "./utils";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -59,6 +60,7 @@ function App() {
     // get background and text color from storage
     chrome.storage.local.get(["bgType", "color", "textColor"], (result) => {
       console.log("Stored Theme info...", result);
+      const imageUrl = getImageUrl(window.innerWidth); // get image url based on window width for if image background is selected
       if (result.bgType === "color") {
         // document.body.style.backgroundColor = result.color;
         document.body.style.setProperty('--custom-background-color', result.color, 'important');
@@ -68,7 +70,8 @@ function App() {
       } else if (result.bgType === "image") {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
-        document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
+        // document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
+        document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
         console.log("Background image set to:", result.image);
       } else {
         // set background image to none
@@ -91,7 +94,7 @@ function App() {
         document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
         console.log("Text color set to:", result.textColor);
       } else if (result.bgType === "image") {
-        handleGetImageBrightness('/background-15_x1032.jpg');
+        handleGetImageBrightness(imageUrl);
       } else {
         setTextColor("#ffffff");
         document.body.style.setProperty('--custom-text-color', "#ffffff", 'important');
