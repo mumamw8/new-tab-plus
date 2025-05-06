@@ -130,10 +130,10 @@ function App() {
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
-            className="flex items-center gap-2 custom-text-color font-bold text-lg cursor-pointer mr-10"
+            className="flex items-center gap-2 opacity-70 font-bold text-lg cursor-pointer mr-10"
             onClick={handleBack}
           >
-            <CircleChevronLeftIcon className="w-6 h-6" />
+            <CircleChevronLeftIcon color={textColor} className="w-6 h-6" />
           </button>
         )}
 

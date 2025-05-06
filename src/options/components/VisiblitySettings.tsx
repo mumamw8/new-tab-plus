@@ -105,6 +105,25 @@ const VisibilitySettings: React.FC = () => {
     <div className="w-full" style={{ color: textColor }}>
       <h3 className="text-sm font-medium mb-3">Content Visibility</h3>
       <div className="space-y-3">
+        {/* Root Nodes Visibility Settings */}
+        <div className='flex flex-col gap-2 p-2 rounded-lg w-full' style={{ backgroundColor: `${textColor}10` }}>
+          <h3 className="text-sm">Bookmarks</h3>
+          {rootNodeIds.map(nodeId => (
+            <button
+              key={nodeId}
+              onClick={() => toggleRootNodeVisibility(nodeId)}
+              className="w-full cursor-pointer flex items-center justify-between p-1 rounded-lg transition-colors duration-200 hover:bg-black/10 dark:hover:bg-white/10"
+              style={{ backgroundColor: `${textColor}10` }}
+            >
+              <span>{rootNodesTitleDictionary[nodeId]}</span>
+              {rootNodesVisibilitySettings[nodeId] ? (
+                <Eye size={18} />
+              ) : (
+                <EyeOff size={18} />
+              )}
+            </button>
+          ))}
+        </div>
         {/* Suggestions List Button */}
         <button
           onClick={() => toggleVisibility('suggestionsList')}
@@ -132,25 +151,6 @@ const VisibilitySettings: React.FC = () => {
             <EyeOff size={18} />
           )}
         </button>
-        {/* Root Nodes Visibility Settings */}
-        <div className='flex flex-col gap-2 p-2 rounded-lg w-full' style={{ backgroundColor: `${textColor}10` }}>
-          <h3 className="text-sm">Bookmarks</h3>
-          {rootNodeIds.map(nodeId => (
-            <button
-              key={nodeId}
-              onClick={() => toggleRootNodeVisibility(nodeId)}
-              className="w-full cursor-pointer flex items-center justify-between p-1 rounded-lg transition-colors duration-200 hover:bg-black/10 dark:hover:bg-white/10"
-              style={{ backgroundColor: `${textColor}10` }}
-            >
-              <span>{rootNodesTitleDictionary[nodeId]}</span>
-              {rootNodesVisibilitySettings[nodeId] ? (
-                <Eye size={18} />
-              ) : (
-                <EyeOff size={18} />
-              )}
-            </button>
-          ))}
-        </div>
       </div>
     </div>
   );
