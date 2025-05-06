@@ -25,11 +25,11 @@ export const useTheme = () => {
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Initialize from storage
   const [backgroundColor, setBackgroundColorState] = useState<string>(() => {
-    let savedColor = '#f3f4f6'; // Default light gray
+    let savedColor = '#3c3c3c'; // Default dark gray
     chrome.storage.local.get(["bgType", "color"], (result) => {
       if (result.bgType === "color") {
         savedColor = result.color;
-        console.log("Background color set to in ThemeContext:", savedColor);
+        // console.log("Background color set to in ThemeContext:", savedColor);
       }
     });
     return savedColor;
