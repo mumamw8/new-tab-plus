@@ -24,7 +24,7 @@ const BookmarkList: React.FC<{
         {title && <h2 className="text-xl custom-text-color font-bold">{title}</h2>}
         {nodes.length > MAX_NODES && (
           <button
-            className="flex items-center gap-2 custom-text-color font-bold underline cursor-pointer mr-10"
+            className="flex opacity-0 group-hover:opacity-100 transition-all duration-150 ease-in-out items-center gap-2 custom-text-color font-medium cursor-pointer mr-10"
             onClick={() => setShowAll((prev) => !prev)}
           >
             {showAll ? "Show Less" : "Show All"}

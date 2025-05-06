@@ -161,21 +161,23 @@ function App() {
           </ul>
         </details>
       </div>
-      {loading ? (
-        <p>Loading bookmarks...</p>
-      ) : currentNodes ? (
-        folderStack.length === 0 ? (
-          renderRootContent()
+      <div className="flex flex-col gap-2 group">
+        {loading ? (
+          <p>Loading bookmarks...</p>
+        ) : currentNodes ? (
+          folderStack.length === 0 ? (
+            renderRootContent()
+          ) : (
+            <BookmarkList
+              nodes={currentNodes}
+              onFolderClick={handleFolderClick}
+              title={currentTitle}
+            />
+          )
         ) : (
-          <BookmarkList
-            nodes={currentNodes}
-            onFolderClick={handleFolderClick}
-            title={currentTitle}
-          />
-        )
-      ) : (
-        <p>No bookmarks found.</p>
-      )}
+          <p>No bookmarks found.</p>
+        )}
+      </div>
       {visibilitySettings.suggestionsList && <SuggestionsList />}
       {visibilitySettings.readingList && <ReadingList />}
     </div>

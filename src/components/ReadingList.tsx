@@ -10,6 +10,7 @@ const MAX_ITEMS = 6;
 const ReadingList: React.FC = () => {
   const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
   const [showAll, setShowAll] = useState(false);
+  const [getUnreadOnly, setGetUnreadOnly] = useState(true);
   const visibleItems = showAll ? readingList : readingList.slice(0, MAX_ITEMS);
 
   // Mark item as read when clicked
@@ -17,34 +18,42 @@ const ReadingList: React.FC = () => {
     chrome.runtime.sendMessage(chrome.runtime.id, { action: "updateReadingListItem", item: { url } });
   };
 
-  async function fetchReadingList() {
-    const items = await chrome.readingList.query({ hasBeenRead: false });
+  async function fetchReadingList(unreadOnly: boolean = false) {
+    const items = await chrome.readingList.query({ hasBeenRead: unreadOnly ? false : undefined });
     // Sort items by creationTime (newest first)
     items.sort((a, b) => b.creationTime - a.creationTime);
     setReadingList(items);
   }
   // Get Reading List
   useEffect(() => {
-    fetchReadingList();
-  }, [])
+    fetchReadingList(getUnreadOnly);
+  }, [getUnreadOnly]);
 
   if (readingList.length === 0) {
     return null;
   }
 
   return (
-    <div className="w-full pt-8">
+    <div className="w-full pt-8 group">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold custom-text-color">Reading List</h2>
-        {readingList.length > MAX_ITEMS && (
+        <div className="flex items-center gap-2">
           <button
-            className="flex items-center gap-2 custom-text-color font-bold underline cursor-pointer mr-10"
-            onClick={() => setShowAll((prev) => !prev)}
+            className="flex opacity-0 group-hover:opacity-55 hover:opacity-90 transition-all duration-150 ease-in-out items-center gap-2 custom-text-color cursor-pointer mr-10"
+            onClick={() => setGetUnreadOnly((prev) => !prev)}
           >
-            {showAll ? "Show Less" : "Show All"}
-            {showAll ? <ChevronLeftIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+            {getUnreadOnly ? "Unread" : "All"}
           </button>
-        )} 
+          {readingList.length > MAX_ITEMS && (
+            <button
+              className="flex opacity-0 group-hover:opacity-90 transition-all duration-150 ease-in-out items-center gap-2 custom-text-color font-medium cursor-pointer mr-10"
+              onClick={() => setShowAll((prev) => !prev)}
+            >
+              {showAll ? "Show Less" : "Show All"}
+              {showAll ? <ChevronLeftIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+            </button>
+          )}
+        </div> 
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {visibleItems.map((item, idx) => (
