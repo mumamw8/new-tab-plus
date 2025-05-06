@@ -7,9 +7,10 @@ import SuggestionsList from "./components/SuggestionsList";
 import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
 import { calculateImageBrightness, getTextColorForBrightness } from "./options/utils/colorUtils";
 import { getImageUrl } from "./utils";
+import useSystemTheme from "./hooks/useSystemTheme";
 
 function App() {
-  const theme = 'dark';
+  const systemTheme = useSystemTheme();
 
   const [currentNodes, setCurrentNodes] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
@@ -47,7 +48,7 @@ function App() {
       const textColor: string = getTextColorForBrightness(brightness);
       console.log("Brightness:", brightness);
       console.log("Text color:", textColor);
-      if (theme === 'dark') {
+      if (systemTheme === 'dark') {
         setTextColor('#ffffff');
         document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
       } else {
@@ -78,7 +79,7 @@ function App() {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
         // document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
-        if (theme === 'dark') {
+        if (systemTheme === 'dark') {
           document.body.classList.add('custom-dark-transparent-background-color-class');
         } else {
           document.body.classList.add('custom-light-transparent-background-color-class');
