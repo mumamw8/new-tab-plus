@@ -4,6 +4,7 @@ import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
+import { VisibilitySettings } from "./options/components/ExtensionSettings";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -15,7 +16,10 @@ function App() {
   const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [textColor, setTextColor] = useState<string>("#ffffff");
-  const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
+  const [visibilitySettings, setVisibilitySettings] = useState<VisibilitySettings>({
+    readingList: true,
+    suggestionsList: true
+  });
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -25,15 +29,6 @@ function App() {
       setLoading(false);
     });
   }, []);
-
-  async function fetchReadingList() {
-    const items = await chrome.readingList.query({ hasBeenRead: false });
-    setReadingList(items);
-  }
-  // Get Reading List
-  useEffect(() => {
-    fetchReadingList();
-  }, [])
 
   // Set App Background
   useEffect(() => {
@@ -74,6 +69,16 @@ function App() {
     });
   }, []);
 
+  // Get Visibility Settings
+  useEffect(() => {
+    chrome.storage.local.get("visibilitySettings", (result) => {
+      if (result.visibilitySettings) {
+        setVisibilitySettings(result.visibilitySettings);
+        console.log("Visibility settings:", result.visibilitySettings);
+      }
+    });
+  }, []);
+
   const handleFolderClick = (
     children: chrome.bookmarks.BookmarkTreeNode[],
     title: string
@@ -107,7 +112,7 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-10 pb-52">
+    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-8 pb-52">
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
@@ -164,8 +169,8 @@ function App() {
       ) : (
         <p>No bookmarks found.</p>
       )}
-      {readingList.length > 0 && <ReadingList readingList={readingList} />}
-      <SuggestionsList />
+      {visibilitySettings.suggestionsList && <SuggestionsList />}
+      {visibilitySettings.readingList && <ReadingList />}
     </div>
   );
 }

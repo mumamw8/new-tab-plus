@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FaviconOrLetter from "./FaviconOrLetter";
 import { getDomain } from "../utils";
 import { formatDistance } from "date-fns";
@@ -7,7 +7,8 @@ import { ChevronLeftIcon } from "lucide-react";
 
 const MAX_ITEMS = 6;
 
-const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[] }> = ({ readingList }) => {
+const ReadingList: React.FC = () => {
+  const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
   const [showAll, setShowAll] = useState(false);
   const visibleItems = showAll ? readingList : readingList.slice(0, MAX_ITEMS);
 
@@ -16,8 +17,21 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
     chrome.runtime.sendMessage(chrome.runtime.id, { action: "updateReadingListItem", item: { url } });
   };
 
+  async function fetchReadingList() {
+    const items = await chrome.readingList.query({ hasBeenRead: false });
+    setReadingList(items);
+  }
+  // Get Reading List
+  useEffect(() => {
+    fetchReadingList();
+  }, [])
+
+  if (readingList.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="w-full pt-10">
+    <div className="w-full pt-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold custom-text-color">Reading List</h2>
         {readingList.length > MAX_ITEMS && (

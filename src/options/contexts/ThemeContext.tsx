@@ -23,11 +23,6 @@ export const useTheme = () => {
 };
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize from localStorage or default
-  // const [backgroundColor, setBackgroundColorState] = useState<string>(() => {
-  //   const savedColor = localStorage.getItem('themeBackgroundColor');
-  //   return savedColor || '#f3f4f6'; // Default light gray
-  // });
   // Initialize from storage
   const [backgroundColor, setBackgroundColorState] = useState<string>(() => {
     let savedColor = '#f3f4f6'; // Default light gray
