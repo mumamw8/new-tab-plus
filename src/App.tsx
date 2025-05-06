@@ -5,6 +5,7 @@ import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
 import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
+import { calculateImageBrightness, getTextColorForBrightness } from "./options/utils/colorUtils";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -32,6 +33,25 @@ function App() {
     });
   }, []);
 
+  // Example: usage with file input
+  function handleGetImageBrightness(imageUrl: string): void {
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = imageUrl;
+
+    img.onload = async () => {
+      const brightness: number = calculateImageBrightness(img);
+      const textColor: string = getTextColorForBrightness(brightness);
+      console.log("Brightness:", brightness);
+      console.log("Text color:", textColor);
+      // setTextColor(textColor);
+    };
+
+    img.onerror = () => {
+      console.warn("Failed to load image:", imageUrl);
+    };
+  }
+
   // Set App Background
   useEffect(() => {
     // get background and text color from storage
@@ -46,8 +66,9 @@ function App() {
       } else if (result.bgType === "image") {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
-        document.body.style.setProperty('--custom-background-image', `url(${'/background-8_x1386.jpg'})`, 'important');
+        document.body.style.setProperty('--custom-background-image', `url(${'/background-18_x2060.jpg'})`, 'important');
         console.log("Background image set to:", result.image);
+        handleGetImageBrightness('/background-18_x2060.jpg');
       } else {
         // set background image to none
         document.body.style.setProperty('--custom-background-image', 'none', 'important');

@@ -13,17 +13,17 @@ body {
   color: var(--custom-text-color);
 }
 
-/* body::before {
+body::before {
   content: "";
-  position: fixed; /* covers viewport even when scrolling
+  position: fixed; /* covers viewport even when scrolling */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.4); /* black overlay, adjust opacity as needed
-  z-index: 0; /* stays behind content
-  pointer-events: none; /* allows clicks through overlay
-} */
+  background: rgba(0, 0, 0, 0.4); /* black overlay, adjust opacity as needed */
+  z-index: 0; /* stays behind content */
+  pointer-events: none; /* allows clicks through overlay */
+}
 
 #root {
   position: relative;

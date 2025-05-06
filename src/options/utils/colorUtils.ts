@@ -69,3 +69,37 @@ export const generateShades = (
 
   return shades;
 };
+
+export const calculateImageBrightness = (image: HTMLImageElement): number => {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return 255; // Default to white background
+
+  canvas.width = image.width;
+  canvas.height = image.height;
+  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+  let totalBrightness = 0;
+  let pixelCount = 0;
+
+  // Step over pixels to improve performance
+  const step = 4 * 10;
+  for (let i = 0; i < data.length; i += step) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+
+    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+    totalBrightness += brightness;
+    pixelCount++;
+  }
+
+  return totalBrightness / pixelCount;
+};
+
+export const getTextColorForBrightness = (brightness: number): string => {
+  return brightness >= 128 ? "#151516" : "#ffffff";
+};

@@ -14,6 +14,7 @@ const BackgroundSettings = () => {
       if (result.bgType === "image" || result.bgType === "color") {
         setBgType(result.bgType);
       }
+      console.log("Background type:", result.bgType);
     });
   }, []);
 
