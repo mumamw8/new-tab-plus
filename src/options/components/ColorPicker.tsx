@@ -39,6 +39,12 @@ const ColorPicker: React.FC = () => {
     setIsDarkMode(prev => !prev);
     setBackgroundColor(isDarkMode ? '#f3f4f6' : '#3c3c3c');
   };
+
+  const toggleAutoTextColor = () => {
+    const newIsAutoTextColor = !isAutoTextColor;
+    setIsAutoTextColor(newIsAutoTextColor);
+    chrome.storage.local.set({ isAutoTextColor: newIsAutoTextColor });
+  };
   
   const copyToClipboard = () => {
     const colorValue = format === 'hex' ? backgroundColor : hexToRgb(backgroundColor);
@@ -58,7 +64,7 @@ const ColorPicker: React.FC = () => {
         <h2 className="text-xl font-medium">Color Picker</h2>
         <div className="flex items-center gap-2">
           <button 
-            onClick={() => setIsAutoTextColor(!isAutoTextColor)}
+            onClick={toggleAutoTextColor}
             className="p-2 rounded-full hover:bg-black/10 dark:hover:bg-white/10 transition duration-300"
             style={{ color: textColor }}
             aria-label={isAutoTextColor ? "Switch to manual text color" : "Switch to automatic text color"}
