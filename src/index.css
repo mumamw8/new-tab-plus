@@ -4,14 +4,16 @@
 
 @layer base {
     :root {
+        color-scheme: light dark;
         font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
         font-synthesis: none;
         text-rendering: optimizeLegibility;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        --custom-background-color: #3c3c3c;
-        --custom-text-color: #ffffff;
-        --custom-opaque-color: rgba(0, 0, 0, 0.4);
+        --custom-background-color: light-dark(#faf9f5, #3c3c3c);
+        --custom-text-color: light-dark(#151516, #ffffff);
+        --custom-dark-transparent-color: rgba(0, 0, 0, 0.4);
+        --custom-light-transparent-color: rgba(255, 255, 255, 0.4);
         background-color: var(--custom-background-color);
         color: var(--custom-text-color);
     }

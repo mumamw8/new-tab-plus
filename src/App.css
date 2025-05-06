@@ -13,19 +13,35 @@ body {
   color: var(--custom-text-color);
 }
 
-.custom-opaque-background-color-class::before {
+.custom-dark-transparent-background-color-class::before {
   content: "";
   position: fixed; /* covers viewport even when scrolling */
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: var(--custom-opaque-color); /* overlay, adjust opacity as needed */
+  background: var(--custom-dark-transparent-color); /* overlay, adjust opacity as needed */
   z-index: 0; /* stays behind content */
   pointer-events: none; /* allows clicks through overlay */
 }
 
-.custom-opaque-background-color-class {
+.custom-dark-transparent-background-color-class {
+  background-color: var(--custom-background-color);
+}
+
+.custom-light-transparent-background-color-class::before {
+  content: "";
+  position: fixed; /* covers viewport even when scrolling */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--custom-light-transparent-color); /* overlay, adjust opacity as needed */
+  z-index: 0; /* stays behind content */
+  pointer-events: none; /* allows clicks through overlay */
+}
+
+.custom-light-transparent-background-color-class {
   background-color: var(--custom-background-color);
 }
 

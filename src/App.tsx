@@ -9,6 +9,8 @@ import { calculateImageBrightness, getTextColorForBrightness } from "./options/u
 import { getImageUrl } from "./utils";
 
 function App() {
+  const theme = 'dark';
+
   const [currentNodes, setCurrentNodes] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
   >([]);
@@ -45,8 +47,13 @@ function App() {
       const textColor: string = getTextColorForBrightness(brightness);
       console.log("Brightness:", brightness);
       console.log("Text color:", textColor);
-      setTextColor('#ffffff');
-      document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
+      if (theme === 'dark') {
+        setTextColor('#ffffff');
+        document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
+      } else {
+        setTextColor('#151516');
+        document.body.style.setProperty('--custom-text-color', '#151516', 'important');
+      }
       // setTextColor(textColor);
     };
 
@@ -71,7 +78,11 @@ function App() {
         // document.body.style.backgroundImage = `url(${result.image})`;
         // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
         // document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
-        document.body.classList.add('custom-opaque-background-color-class');
+        if (theme === 'dark') {
+          document.body.classList.add('custom-dark-transparent-background-color-class');
+        } else {
+          document.body.classList.add('custom-light-transparent-background-color-class');
+        }
         document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
         console.log("Background image set to:", result.image);
       } else {
