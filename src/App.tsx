@@ -4,7 +4,7 @@ import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
-import { VisibilitySettingsType } from "./options/components/ExtensionSettings";
+import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -20,6 +20,7 @@ function App() {
     readingList: true,
     suggestionsList: true
   });
+  const [rootNodesVisibilitySettings, setRootNodesVisibilitySettings] = useState<RootNodesVisibilitySettingsType>({});
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -74,7 +75,16 @@ function App() {
     chrome.storage.local.get("visibilitySettings", (result) => {
       if (result.visibilitySettings) {
         setVisibilitySettings(result.visibilitySettings);
-        console.log("Visibility settings:", result.visibilitySettings);
+        // console.log("Visibility settings:", result.visibilitySettings);
+      }
+    });
+  }, []);
+  // Get Root Nodes Visibility Settings
+  useEffect(() => {
+    chrome.storage.local.get("rootNodesVisibilitySettings", (result) => {
+      if (result.rootNodesVisibilitySettings) {
+        setRootNodesVisibilitySettings(result.rootNodesVisibilitySettings);
+        // console.log("Root nodes visibility settings:", result.rootNodesVisibilitySettings);
       }
     });
   }, []);
@@ -97,6 +107,8 @@ function App() {
   const renderRootContent = () => {
     return currentNodes.map((node) => {
       if (!node.children || node.children.length === 0) return null;
+      if (!rootNodesVisibilitySettings[node.id]) return null;
+
       return (
         <div key={node.id} className="mb-2">
           <BookmarkList
@@ -122,14 +134,7 @@ function App() {
             <CircleChevronLeftIcon className="w-6 h-6" />
           </button>
         )}
-        {/* <button
-          className="btn btn-primary ml-auto"
-          onClick={() => {
-            chrome.tabs.update({ url: "chrome://bookmarks/" });
-          }}
-        >
-          Manage
-        </button> */}
+
         <details className="dropdown ml-auto">
           <summary className={`btn btn-link btn-circle btn-sm hover:bg-white/5 backdrop-blur-sm custom-text-color`}><EllipsisIcon color={textColor} className="w-4 h-4" /></summary>
           <ul className="menu dropdown-content custom-text-color bg-white/5 backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm">

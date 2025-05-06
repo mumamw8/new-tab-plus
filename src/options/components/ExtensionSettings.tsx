@@ -7,6 +7,9 @@ export type VisibilitySettingsType = {
   readingList: boolean;
   suggestionsList: boolean;
 }
+export type RootNodesVisibilitySettingsType = {
+  [nodeId: string]: boolean;
+}
 
 const ExtensionSettings: React.FC = () => {
   const { textColor } = useTheme();
@@ -30,7 +33,7 @@ const ExtensionSettings: React.FC = () => {
       >
         <div className="flex items-center gap-2">
           <SettingsIcon className="w-4 h-4" />
-          <h2 className="font-medium">Extension Settings</h2>
+          <h2 className="font-medium">Content Settings</h2>
         </div>
         <button
           aria-label={isOpen ? "Collapse panel" : "Expand panel"}
