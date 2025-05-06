@@ -3,6 +3,7 @@ import "./App.css";
 import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
+import SuggestionsList from "./components/SuggestionsList";
 
 function App() {
   const [currentNodes, setCurrentNodes] = useState<
@@ -49,11 +50,11 @@ function App() {
         console.log("Background image set to:", result.image);
       } else {
         // document.body.style.backgroundColor = "black";
-        document.body.style.setProperty('--custom-background-color', "black", 'important');
+        document.body.style.setProperty('--custom-background-color', "#3c3c3c", 'important');
         chrome.storage.local.get(["bgType", "color"], (result) => {
           if (!result.bgType) {
             chrome.storage.local
-              .set({ bgType: "color", color: "black" })
+              .set({ bgType: "color", color: "#3c3c3c" })
               .then((result) => {
                 console.log(result);
                 console.log("Default background color set");
@@ -106,7 +107,7 @@ function App() {
   const currentTitle = titleStack[titleStack.length - 1];
 
   return (
-    <div className="max-w-4xl px-4 lg:px-0 mx-auto pt-14 pb-52">
+    <div className="max-w-2xl px-4 lg:px-0 mx-auto pt-10 pb-52">
       <div className="flex items-center mb-4">
         {folderStack.length > 0 && (
           <button
@@ -164,6 +165,7 @@ function App() {
         <p>No bookmarks found.</p>
       )}
       {readingList.length > 0 && <ReadingList readingList={readingList} />}
+      <SuggestionsList />
     </div>
   );
 }

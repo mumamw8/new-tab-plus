@@ -1,25 +1,37 @@
-import React, { useState } from "react";
-import { getDomain } from "../utils";
+import React, { useEffect, useState } from "react";
+import { faviconURL, faviconURLFromChrome, getDomain } from "../utils";
 
 function getFirstLetter(url: string) {
   const domain = getDomain(url);
   return domain ? domain[0].toUpperCase() : "?";
 }
 
-// function faviconURL(u: string, size: string) {
-//   const url = new URL(chrome.runtime.getURL("/_favicon/"));
-//   url.searchParams.set("pageUrl", u);
-//   url.searchParams.set("size", size);
-//   return url.toString();
-// }
-function faviconURL(u: string, size: string) {
-  const domain = getDomain(u);
-  return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`
-}
-
-const FaviconOrLetter: React.FC<{ title: string; url: string; size?: number }> = ({ title, url, size = 32 }) => {
+const FaviconOrLetter: React.FC<{ title: string; url: string; iconSize: number }> = ({ title, url, iconSize = 32 }) => {
   const [error, setError] = useState(false);
-  const itemSize = 32;
+  const [src, setSrc] = useState<string | null | undefined>(undefined);
+  const itemSize = iconSize < 32 ? iconSize : 32;
+
+  useEffect(() => {
+    const img = new Image();
+
+    img.onload = () => {
+      if (img.naturalHeight === 16 && img.naturalWidth === 16) {
+        setSrc(null);
+      } else {
+        setSrc(faviconURL(url, iconSize.toString()));
+      }
+    };
+
+    img.onerror = () => {
+      setSrc(null);
+    };
+
+    img.src = faviconURL(url, iconSize.toString());
+  }, [url, iconSize]);
+
+  if (src === undefined) {
+    return null;
+  }
 
   return <div 
     className={`relative flex items-center justify-center w-16 h-16 mb-2 rounded-2xl bg-white/5 backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`}
@@ -33,7 +45,7 @@ const FaviconOrLetter: React.FC<{ title: string; url: string; size?: number }> =
       </span>
     ) : (
       <img
-        src={faviconURL(url, size.toString())}
+        src={src ?? faviconURLFromChrome(url, iconSize.toString())}
         alt={`${title} favicon`}
         width={itemSize}
         height={itemSize}

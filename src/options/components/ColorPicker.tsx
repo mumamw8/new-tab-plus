@@ -37,7 +37,7 @@ const ColorPicker: React.FC = () => {
   
   const toggleDarkMode = () => {
     setIsDarkMode(prev => !prev);
-    setBackgroundColor(isDarkMode ? '#f3f4f6' : '#121212');
+    setBackgroundColor(isDarkMode ? '#f3f4f6' : '#3c3c3c');
   };
   
   const copyToClipboard = () => {

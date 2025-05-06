@@ -19,19 +19,19 @@ const BookmarkList: React.FC<{
   const visibleNodes = showAll ? nodes : nodes.slice(0, MAX_NODES);
 
   return (
-    <>
-    <div className="flex items-center justify-between">
-      {title && <h2 className="text-lg custom-text-color font-bold">{title}</h2>}
-      {nodes.length > MAX_NODES && (
-        <button
-          className="flex items-center gap-2 custom-text-color font-bold underline cursor-pointer mr-10"
-          onClick={() => setShowAll((prev) => !prev)}
-        >
-          {showAll ? "Show Less" : "Show All"}
-          {showAll ? <ChevronLeftIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
-        </button>
-      )}
-    </div>
+    <div className="w-full">
+      <div className="flex items-center justify-between">
+        {title && <h2 className="text-xl custom-text-color font-bold">{title}</h2>}
+        {nodes.length > MAX_NODES && (
+          <button
+            className="flex items-center gap-2 custom-text-color font-bold underline cursor-pointer mr-10"
+            onClick={() => setShowAll((prev) => !prev)}
+          >
+            {showAll ? "Show Less" : "Show All"}
+            {showAll ? <ChevronLeftIcon className="w-4 h-4" /> : <ChevronRightIcon className="w-4 h-4" />}
+          </button>
+        )}
+      </div>
       <div className="flex flex-wrap gap-2 py-2">
         {visibleNodes.map((node) => (
           <BookmarkNode
@@ -42,7 +42,7 @@ const BookmarkList: React.FC<{
         ))}
       </div>
       
-    </>
+    </div>
   );
 };
 

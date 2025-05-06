@@ -20,7 +20,7 @@ const BookmarkNode = ({
         title={node.title} // Add title attribute
         aria-label={node.title} // Add aria-label for accessibility
       >
-        <FaviconOrLetter title={node.title} url={node.url} size={64} />
+        <FaviconOrLetter title={node.title} url={node.url} iconSize={64} />
         <span className="text-[0.7rem] leading-3 custom-text-color font-medium text-center w-full line-clamp-2">
           {node.title}
         </span>

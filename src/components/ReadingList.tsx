@@ -17,7 +17,7 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
   };
 
   return (
-    <div className="max-w-4xl mx-auto pt-14">
+    <div className="w-full pt-14">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold custom-text-color">Reading List</h2>
         {readingList.length > MAX_ITEMS && (
@@ -30,14 +30,14 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
           </button>
         )} 
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         {visibleItems.map((item, idx) => (
           <a
             href={item.url}
             title={item.title}
             aria-label={item.title}
             key={idx}
-            className="relative flex custom-text-color bg-white/10 rounded-xl shadow-md p-4 items-center gap-4"
+            className="relative flex custom-text-color bg-white/10 rounded-xl shadow-md p-2 items-center gap-4"
             onClick={() => handleLinkClick(item.url)}
           >
             {!item.hasBeenRead && (
@@ -46,10 +46,10 @@ const ReadingList: React.FC<{ readingList: chrome.readingList.ReadingListEntry[]
                 title="Unread"
               ></span>
             )}
-            <FaviconOrLetter title={item.title} url={item.url} size={64} />
+            <FaviconOrLetter title={item.title} url={item.url} iconSize={64} />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold text-lg line-clamp-2 custom-text-color">{item.title}</span>
+                <span className="font-semibold line-clamp-2 custom-text-color">{item.title}</span>
               </div>
               <div className="text-xs w-full truncate mb-1 custom-text-color">{getDomain(item.url)}</div>
               <div className="text-xs custom-text-color">
