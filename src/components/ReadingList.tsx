@@ -62,7 +62,7 @@ const ReadingList: React.FC = () => {
             title={item.title}
             aria-label={item.title}
             key={idx}
-            className="relative flex custom-text-color bg-white/10 rounded-xl shadow-md p-2 items-center gap-4"
+            className="relative flex custom-text-color bg-white/5 backdrop-blur-sm rounded-xl shadow-md p-2 items-center gap-4"
             onClick={() => handleLinkClick(item.url)}
           >
             {!item.hasBeenRead && (

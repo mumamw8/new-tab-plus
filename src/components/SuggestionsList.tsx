@@ -49,7 +49,7 @@ const SuggestionsList: React.FC = () => {
             title={item.title}
             aria-label={item.title}
             key={idx}
-            className="relative flex custom-text-color bg-white/10 rounded-xl shadow-md p-4 items-center gap-4"
+            className="relative flex custom-text-color bg-white/5 backdrop-blur-sm rounded-xl shadow-md p-4 items-center gap-4"
           >
             {item.url && <Favicon url={item.url} iconSize="32" size={16} />}
             <span className="custom-text-color text-[0.9rem] font-semibold truncate w-full">{item.title && item.title.length > 0 ? item.title : item.url}</span>
