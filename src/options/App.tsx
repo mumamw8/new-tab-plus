@@ -24,13 +24,13 @@ const ExtensionOptions = () => {
       className="min-h-screen w-full flex flex-col transition-colors duration-300 ease-in-out p-4 md:p-8"
       style={{ backgroundColor: backgroundColor, color: textColor }}
     >
-      <div className="flex w-full flex-wrap gap-4">
-        <div className="p-6 max-w-md bg-white/5 backdrop-blur-sm rounded shadow mb-6">
-          <ThemeCustomizer />
-        </div>
+      <div className="flex flex-wrap-reverse w-full justify-end gap-4">
         {/* Settings Container */}
         <div className="p-6 max-w-md bg-white/5 backdrop-blur-sm rounded shadow mb-6">
           <ExtensionSettings />
+        </div>
+        <div className="p-6 max-w-md bg-white/5 backdrop-blur-sm rounded shadow mb-6">
+          <ThemeCustomizer />
         </div>
       </div>
     </div>

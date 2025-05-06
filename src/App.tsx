@@ -21,6 +21,7 @@ function App() {
     suggestionsList: true
   });
   const [rootNodesVisibilitySettings, setRootNodesVisibilitySettings] = useState<RootNodesVisibilitySettingsType>({});
+  const [bookmarksVisibilitySettingsIsEmpty, setBookmarksVisibilitySettingsIsEmpty] = useState(true);
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -82,8 +83,9 @@ function App() {
   // Get Root Nodes Visibility Settings
   useEffect(() => {
     chrome.storage.local.get("rootNodesVisibilitySettings", (result) => {
-      if (result.rootNodesVisibilitySettings) {
+      if (result.rootNodesVisibilitySettings && Object.keys(result.rootNodesVisibilitySettings).length > 0) {
         setRootNodesVisibilitySettings(result.rootNodesVisibilitySettings);
+        setBookmarksVisibilitySettingsIsEmpty(false);
         // console.log("Root nodes visibility settings:", result.rootNodesVisibilitySettings);
       }
     });
@@ -107,7 +109,7 @@ function App() {
   const renderRootContent = () => {
     return currentNodes.map((node) => {
       if (!node.children || node.children.length === 0) return null;
-      if (!rootNodesVisibilitySettings[node.id]) return null;
+      if (!rootNodesVisibilitySettings[node.id] && !bookmarksVisibilitySettingsIsEmpty) return null;
 
       return (
         <div key={node.id} className="mb-2">

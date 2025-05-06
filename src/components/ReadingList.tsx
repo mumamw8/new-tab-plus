@@ -19,6 +19,8 @@ const ReadingList: React.FC = () => {
 
   async function fetchReadingList() {
     const items = await chrome.readingList.query({ hasBeenRead: false });
+    // Sort items by creationTime (newest first)
+    items.sort((a, b) => b.creationTime - a.creationTime);
     setReadingList(items);
   }
   // Get Reading List
