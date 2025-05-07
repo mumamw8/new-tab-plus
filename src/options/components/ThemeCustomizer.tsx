@@ -1,25 +1,34 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Palette } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
-import ColorPicker from './ColorPicker';
-import PresetColors from './PresetColors';
+import React, { useState, useEffect } from "react";
+import { ChevronDown, ChevronUp, Palette } from "lucide-react";
+import { useTheme } from "../contexts/ThemeContext";
+import ColorPicker from "./ColorPicker";
+import PresetColors from "./PresetColors";
 
 const ThemeCustomizer: React.FC = () => {
   const { textColor } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
-  
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--customizer-bg-color",
+      textColor === "#ffffff"
+        ? "rgba(40, 40, 40, 0.85)"
+        : "rgba(255, 255, 255, 0.85)"
+    );
+  }, [textColor]);
+
   return (
-    <div 
+    <div
       className="w-80 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out shadow-xl flex flex-col gap-4"
-      style={{ 
-        backgroundColor: `${textColor === '#ffffff' ? 'rgba(40, 40, 40, 0.85)' : 'rgba(255, 255, 255, 0.85)'}`,
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        transform: isOpen ? 'translateY(0)' : 'translateY(calc(100% - 48px))',
-        maxHeight: isOpen ? '80vh' : '48px',
+      style={{
+        backgroundColor: `var(--customizer-bg-color)`,
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        transform: isOpen ? "translateY(0)" : "translateY(calc(100% - 48px))",
+        maxHeight: isOpen ? "80vh" : "48px",
       }}
     >
-      <div 
+      <div
         className="flex items-center justify-between p-3 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         style={{ color: textColor }}
@@ -35,10 +44,13 @@ const ThemeCustomizer: React.FC = () => {
           {isOpen ? <ChevronDown size={18} /> : <ChevronUp size={18} />}
         </button>
       </div>
-      
+
       <div className="p-4 overflow-y-auto max-h-[calc(80vh-48px)]">
         <ColorPicker />
-        <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
+        <div
+          className="h-px my-4"
+          style={{ backgroundColor: `${textColor}20` }}
+        ></div>
         <PresetColors />
       </div>
     </div>
