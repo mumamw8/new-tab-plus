@@ -1,4 +1,4 @@
-# Useful New Tab
+# New Tab Pro
 
 A customizable, modern Chrome extension that transforms your new tab page into a powerful dashboard for bookmarks and reading list management, with beautiful theming options.
 
@@ -34,7 +34,7 @@ A customizable, modern Chrome extension that transforms your new tab page into a
 1. **Clone this repository:**
    ```sh
    git clone <your-repo-url>
-   cd useful-new-tab
+   cd new-tab-pro
    ```
 
 2. **Install dependencies:**
