@@ -13,7 +13,7 @@ const ReadingList: React.FC = () => {
   const [readingList, setReadingList] = useState<chrome.readingList.ReadingListEntry[]>([]);
   const [showAll, setShowAll] = useState(false);
   const [getUnreadOnly, setGetUnreadOnly] = useState(true);
-  const cardStyle = useCardStyle();
+  const { cardStyle } = useCardStyle();
   const visibleItems = showAll ? readingList : readingList.slice(0, MAX_ITEMS);
 
   // Mark item as read when clicked

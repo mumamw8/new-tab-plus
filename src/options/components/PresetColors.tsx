@@ -1,5 +1,8 @@
 import React from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import useBackgroundColor from '../../hooks/useBackgroundColor';
+import useTextColor from '../../hooks/useTextColor';
+import useColorHistory from '../../hooks/useColorHistory';
+// import { useTheme } from '../contexts/ThemeContext';
 
 const presets = [
   { name: 'Slate', color: '#64748b' },
@@ -27,8 +30,11 @@ const presets = [
 ];
 
 const PresetColors: React.FC = () => {
-  const { backgroundColor, textColor, setBackgroundColor, colorHistory, clearHistory } = useTheme();
-  
+  // const { backgroundColor, textColor, setBackgroundColor, colorHistory, clearHistory } = useTheme();
+  const { backgroundColor, updateBackgroundColor } = useBackgroundColor();
+  const { textColor } = useTextColor();
+  const { colorHistory, clearHistory } = useColorHistory();
+
   return (
     <div className="w-full" style={{ color: textColor }}>
       <div className="mb-4">
@@ -37,7 +43,7 @@ const PresetColors: React.FC = () => {
           {presets.map((preset) => (
             <button
               key={preset.color}
-              onClick={() => setBackgroundColor(preset.color)}
+              onClick={() => updateBackgroundColor(preset.color)}
               className="w-full aspect-square rounded-md transition-transform hover:scale-105 relative"
               style={{ 
                 backgroundColor: preset.color,
@@ -73,7 +79,7 @@ const PresetColors: React.FC = () => {
             {colorHistory.map((color) => (
               <button
                 key={color}
-                onClick={() => setBackgroundColor(color)}
+                onClick={() => updateBackgroundColor(color)}
                 className="w-full aspect-square rounded-md transition-transform hover:scale-105"
                 style={{ 
                   backgroundColor: color,

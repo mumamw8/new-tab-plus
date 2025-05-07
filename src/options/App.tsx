@@ -1,28 +1,13 @@
-import { useEffect } from "react";
 import "../App.css";
 import ThemeCustomizer from "./components/ThemeCustomizer";
-import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ExtensionSettings from "./components/ExtensionSettings";
 import ExtraOptions from "./components/ExtraOptions";
-import useSystemTheme from "../hooks/useSystemTheme";
+import useBackgroundColor from "../hooks/useBackgroundColor";
+import useTextColor from "../hooks/useTextColor";
 
 const ExtensionOptions = () => {
-  const { setBackgroundColor, backgroundColor, textColor } = useTheme();
-  const systemTheme = useSystemTheme();
-
-  useEffect(() => {
-    chrome.storage.local.get(["bgType", "darkBackgroundColor", "lightBackgroundColor"], (result) => {
-      if (result.bgType === "color") {
-        if (systemTheme === 'dark') {
-          setBackgroundColor(result.darkBackgroundColor);
-          console.log("Background color set to in ExtensionOptions:", result.darkBackgroundColor);
-        } else {
-          setBackgroundColor(result.lightBackgroundColor);
-          console.log("Background color set to in ExtensionOptions:", result.lightBackgroundColor);
-        }
-      }
-    });
-  }, [systemTheme]);
+  const { backgroundColor } = useBackgroundColor();
+  const { textColor } = useTextColor();
 
   return (
     <div 
@@ -48,9 +33,7 @@ const ExtensionOptions = () => {
 
 function App() {
   return (
-    <ThemeProvider>
-      <ExtensionOptions />
-    </ThemeProvider>
+    <ExtensionOptions />
   );
 }
 

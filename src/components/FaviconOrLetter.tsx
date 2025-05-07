@@ -12,7 +12,7 @@ const FaviconOrLetter: React.FC<{ title: string; url: string; iconSize: number }
   const [error, setError] = useState(false);
   const [src, setSrc] = useState<string | null | undefined>(undefined);
   const itemSize = iconSize < 32 ? iconSize : 32;
-  const cardStyle = useCardStyle();
+  const { cardStyle } = useCardStyle();
 
   useEffect(() => {
     const img = new Image();

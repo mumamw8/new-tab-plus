@@ -1,10 +1,15 @@
 import React, { useState, useRef } from 'react';
 import { Moon, Sun, Copy, Check, Wand2 } from 'lucide-react';
-import { useTheme } from '../contexts/ThemeContext';
 import { hexToRgb } from '../utils/colorUtils';
+import useBackgroundColor from '../../hooks/useBackgroundColor';
+import useTextColor from '../../hooks/useTextColor';
+import useIsAutoTextColor from '../../hooks/useIsAutoTextColor';
 
 const ColorPicker: React.FC = () => {
-  const { backgroundColor, textColor, setBackgroundColor, isAutoTextColor, setIsAutoTextColor, setManualTextColor } = useTheme();
+  const { backgroundColor, updateBackgroundColor } = useBackgroundColor();
+  const { textColor, updateTextColor } = useTextColor();
+  const { isAutoTextColor, toggleIsAutoTextColor } = useIsAutoTextColor();
+  // const { backgroundColor, textColor, setBackgroundColor, isAutoTextColor, setIsAutoTextColor, setManualTextColor } = useTheme();
   const [format, setFormat] = useState<'hex' | 'rgb'>('hex');
   const [copied, setCopied] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -12,11 +17,11 @@ const ColorPicker: React.FC = () => {
   const textColorInputRef = useRef<HTMLInputElement>(null);
   
   const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBackgroundColor(e.target.value);
+    updateBackgroundColor(e.target.value);
   };
 
   const handleTextColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setManualTextColor(e.target.value);
+    updateTextColor(e.target.value);
   };
   
   const handleColorClick = () => {
@@ -37,13 +42,11 @@ const ColorPicker: React.FC = () => {
   
   const toggleDarkMode = () => {
     setIsDarkMode(prev => !prev);
-    setBackgroundColor(isDarkMode ? '#f3f4f6' : '#3c3c3c');
+    updateBackgroundColor(isDarkMode ? '#f3f4f6' : '#3c3c3c');
   };
 
   const toggleAutoTextColor = () => {
-    const newIsAutoTextColor = !isAutoTextColor;
-    setIsAutoTextColor(newIsAutoTextColor);
-    chrome.storage.local.set({ isAutoTextColor: newIsAutoTextColor });
+    toggleIsAutoTextColor();
   };
   
   const copyToClipboard = () => {

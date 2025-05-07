@@ -1,26 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Sun, Moon, Circle } from "lucide-react";
-import { useTheme } from "../contexts/ThemeContext";
+import useCardStyle from "../../hooks/useCardStyle";
+import useTextColor from "../../hooks/useTextColor";
 export type Theme = "light" | "dark" | "neutral";
 
-interface ThemeSelectorProps {
-  initialTheme?: Theme;
-  onThemeChange?: (theme: Theme) => void;
-}
-
-const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
-  initialTheme = "neutral",
-  onThemeChange,
-}) => {
-  const [selectedTheme, setSelectedTheme] = useState<Theme>(initialTheme);
+const ItemsThemeSelector: React.FC = () => {
+  const { cardStyle, updateCardStyle } = useCardStyle();
   const [sliderPosition, setSliderPosition] = useState(0);
   const buttonRefs = {
     light: useRef<HTMLButtonElement>(null),
     neutral: useRef<HTMLButtonElement>(null),
     dark: useRef<HTMLButtonElement>(null),
   };
-
-  const { textColor } = useTheme();
+  const { textColor } = useTextColor();
 
   const updateSliderPosition = (theme: Theme) => {
     const button = buttonRefs[theme].current;
@@ -36,32 +28,19 @@ const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
   };
 
   useEffect(() => {
-    updateSliderPosition(selectedTheme);
+    updateSliderPosition(cardStyle);
     // Update position on window resize
-    const handleResize = () => updateSliderPosition(selectedTheme);
+    const handleResize = () => updateSliderPosition(cardStyle);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [selectedTheme]);
+  }, [cardStyle]);
 
   useEffect(() => {
-    chrome.storage.local.get(["cardStyle"], (result) => {
-      if (result.cardStyle) {
-        console.log("cardStyle:", result.cardStyle);
-        setSelectedTheme(result.cardStyle);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    document.documentElement.style.setProperty("--card-style", selectedTheme);
-  }, [selectedTheme]);
+    document.documentElement.style.setProperty("--card-style", cardStyle);
+  }, [cardStyle]);
 
   const handleThemeChange = (theme: Theme) => {
-    setSelectedTheme(theme);
-    chrome.storage.local.set({ cardStyle: theme });
-    if (onThemeChange) {
-      onThemeChange(theme);
-    }
+    updateCardStyle(theme);
   };
 
   return (
@@ -84,7 +63,7 @@ const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
             WebkitBackdropFilter: "blur(12px)",
             transform: `translateX(${sliderPosition}px)`,
             width: 10,
-            height: buttonRefs[selectedTheme].current?.offsetHeight || 0,
+            height: buttonRefs[cardStyle].current?.offsetHeight || 0,
           }}
         />
 
@@ -93,7 +72,7 @@ const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
           ref={buttonRefs.light}
           onClick={() => handleThemeChange("light")}
           className={`relative cursor-pointer flex items-center justify-center p-2.5 px-4 rounded-full transition-all duration-300`}
-          style={{ color: selectedTheme === "light" ? "orange" : textColor }}
+          style={{ color: cardStyle === "light" ? "orange" : textColor }}
           aria-label="Light theme"
         >
           <Sun className="h-5 w-5" />
@@ -105,7 +84,7 @@ const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
           ref={buttonRefs.neutral}
           onClick={() => handleThemeChange("neutral")}
           className={`relative cursor-pointer flex items-center justify-center p-2.5 px-4 rounded-full transition-all duration-300`}
-          style={{ color: selectedTheme === "neutral" ? "gray" : textColor }}
+          style={{ color: cardStyle === "neutral" ? "gray" : textColor }}
           aria-label="Neutral theme"
         >
           <Circle className="h-5 w-5" />
@@ -117,7 +96,7 @@ const ItemsThemeSelector: React.FC<ThemeSelectorProps> = ({
           ref={buttonRefs.dark}
           onClick={() => handleThemeChange("dark")}
           className={`relative cursor-pointer flex items-center justify-center p-2.5 px-4 rounded-full transition-all duration-300`}
-          style={{ color: selectedTheme === "dark" ? "#a851f4" : textColor }}
+          style={{ color: cardStyle === "dark" ? "#a851f4" : textColor }}
           aria-label="Dark theme"
         >
           <Moon className="h-5 w-5" />

@@ -1,28 +1,30 @@
 import { WallpaperIcon } from "lucide-react";
 import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useTheme } from "../contexts/ThemeContext";
 import ItemsThemeSelector from "./ItemsThemeSelector";
+import useBackgroundType from "../../hooks/useBackgroundType";
+import useTextColor from "../../hooks/useTextColor";
+import { useState } from "react";
 
 const ExtraOptions = () => {
-  const { textColor } = useTheme();
-  const [isOpen, setIsOpen] = useState(true);
-  const [bgType, setBgType] = useState<"image" | "color">("color");
+  // const { textColor } = useTheme();
+  // const [bgType, setBgType] = useState<"image" | "color">("color");
 
-  useEffect(() => {
-    chrome.storage.local.get(["bgType"], (result) => {
-      if (result.bgType === "image" || result.bgType === "color") {
-        setBgType(result.bgType);
-      }
-      console.log("Background type:", result.bgType);
-    });
-  }, []);
+  // useEffect(() => {
+  //   chrome.storage.local.get(["bgType"], (result) => {
+  //     if (result.bgType === "image" || result.bgType === "color") {
+  //       setBgType(result.bgType);
+  //     }
+  //     console.log("Background type:", result.bgType);
+  //   });
+  // }, []);
+  const { bgType, updateBgType } = useBackgroundType();
+  const { textColor } = useTextColor();
+  const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = () => {
     const newType = bgType === "image" ? "color" : "image";
-    setBgType(newType);
-    chrome.storage.local.set({ bgType: newType });
+    updateBgType(newType);
   };
 
   return (
@@ -71,7 +73,7 @@ const ExtraOptions = () => {
             </button>
           </div>
           <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
-          <ItemsThemeSelector initialTheme="neutral" />
+          <ItemsThemeSelector />
         </div>
       </div>
     </div>

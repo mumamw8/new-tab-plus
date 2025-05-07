@@ -12,7 +12,7 @@ const BookmarkNode = ({
     title: string
   ) => void;
 }) => {
-  const cardStyle = useCardStyle();
+  const { cardStyle } = useCardStyle();
   const baseClasses = `flex flex-col items-center cursor-pointer rounded-xl transition-all duration-200 w-[72px]`;
 
   if (node.url) {

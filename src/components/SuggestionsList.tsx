@@ -21,7 +21,7 @@ function sortHistoryItemsByTypedCount(historyItems: chrome.history.HistoryItem[]
 
 const SuggestionsList: React.FC = () => {
   const [history, setHistory] = useState<chrome.history.HistoryItem[]>([]);
-  const cardStyle = useCardStyle();
+  const { cardStyle } = useCardStyle();
 
   useEffect(() => {
     // To look for history items visited in the last week,

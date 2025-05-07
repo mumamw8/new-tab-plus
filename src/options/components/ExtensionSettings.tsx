@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { useTheme } from '../contexts/ThemeContext';
+// import { useTheme } from '../contexts/ThemeContext';
 import { ChevronDown, ChevronUp, SettingsIcon } from 'lucide-react';
 import VisibilitySettings from './VisiblitySettings';
+import useTextColor from '../../hooks/useTextColor';
 
 export type VisibilitySettingsType = {
   readingList: boolean;
@@ -12,7 +13,8 @@ export type RootNodesVisibilitySettingsType = {
 }
 
 const ExtensionSettings: React.FC = () => {
-  const { textColor } = useTheme();
+  // const { textColor } = useTheme();
+  const { textColor } = useTextColor();
   const [isOpen, setIsOpen] = useState(true);
 
   return (

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { useTheme } from '../contexts/ThemeContext';
+// import { useTheme } from '../contexts/ThemeContext';
 import { Eye, EyeOff } from 'lucide-react'; 
 import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from './ExtensionSettings';
+import useTextColor from '../../hooks/useTextColor';
 
 type RootNodesTitleDictionaryType = {
   [nodeId: string]: string;
 }
 const VisibilitySettings: React.FC = () => {
-  const { textColor } = useTheme();
+  // const { textColor } = useTheme();
+  const { textColor } = useTextColor();
   const [visibilitySettings, setVisibilitySettings] = useState<VisibilitySettingsType>({
     readingList: true,
     suggestionsList: true
