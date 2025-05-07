@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { calculateTextColor } from '../utils/colorUtils';
+import useSystemTheme from '../../hooks/useSystemTheme';
 
 type ThemeContextType = {
   backgroundColor: string;
@@ -33,15 +34,51 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return savedHistory ? JSON.parse(savedHistory).slice(0, 10) : [];
   });
   const [isInitialized, setIsInitialized] = useState(false);
+  const systemTheme = useSystemTheme();
 
+  const handleSaveBackgroundColorAccordingToSystemTheme = () => {
+    if (systemTheme === 'dark') {
+      chrome.storage.local.set({ color: backgroundColor, darkBackgroundColor: backgroundColor });
+      console.log("Dark background color saved to storage:", backgroundColor);
+    } else {
+      chrome.storage.local.set({ color: backgroundColor, lightBackgroundColor: backgroundColor });
+      console.log("Light background color saved to storage:", backgroundColor);
+    }
+  }
+
+  const handleSaveTextColorAccordingToSystemTheme = () => {
+    if (systemTheme === 'dark') {
+      chrome.storage.local.set({ darkTextColor: textColor });
+      console.log("Dark text color set to:", textColor);
+    } else {
+      chrome.storage.local.set({ lightTextColor: textColor });
+      console.log("Light text color set to:", textColor);
+    }
+  }
   // Load all relevant values from chrome.storage.local on mount
   useEffect(() => {
-    chrome.storage.local.get(['bgType', 'color', 'isAutoTextColor', 'textColor'], (result) => {
+    chrome.storage.local.get(['bgType', 'isAutoTextColor', 'darkBackgroundColor', 'lightBackgroundColor', 'darkTextColor', 'lightTextColor'], (result) => {
       console.log("GET Settings result:", result);
       // Set background color if available
-      if (result.bgType === 'color' && result.color) {
-        setBackgroundColorState(result.color);
+      if (result.bgType === 'color') {
+        if (systemTheme === 'dark') {
+          if (result.darkBackgroundColor) {
+            setBackgroundColorState(result.darkBackgroundColor);
+          }
+        } else {
+          if (result.lightBackgroundColor) {
+            setBackgroundColorState(result.lightBackgroundColor);
+          }
+        }
       }
+
+      const handleSetAutoTextColor = () => {
+        const colorToCalculateTextColor = systemTheme === 'dark' ? result.darkBackgroundColor : result.lightBackgroundColor;
+        const fallBackColorToCalculateTextColor = systemTheme === 'dark' ? '#3c3c3c' : '#dde3e9';
+        setTextColor(calculateTextColor(colorToCalculateTextColor || fallBackColorToCalculateTextColor));
+        setIsAutoTextColor(true);
+      }
+
 
       // Set auto/manual text color mode
       if (typeof result.isAutoTextColor === 'boolean') {
@@ -49,30 +86,36 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         // Set text color based on mode
         if (result.isAutoTextColor) {
-          setTextColor(calculateTextColor(result.color || '#3c3c3c'));
-        } else if (result.textColor) {
-          console.log("SET Text Color:", result.textColor);
-          setTextColor(result.textColor);
+          handleSetAutoTextColor();
+        } else if (result.darkTextColor || result.lightTextColor) {
+          const textColorToSet = systemTheme === 'dark' ? result.darkTextColor : result.lightTextColor;
+          if (!textColorToSet) {
+            handleSetAutoTextColor();
+          } else {
+            setTextColor(textColorToSet);
+          }
         }
       } else {
         // Default: auto mode
-        setIsAutoTextColor(true);
-        setTextColor(calculateTextColor(result.color || '#3c3c3c'));
+        handleSetAutoTextColor();
       }
       setIsInitialized(true);
     });
-  }, []);
+  }, [systemTheme]);
 
   // Only run this effect after initialization
   useEffect(() => {
     if (!isInitialized) return;
     if (isAutoTextColor) {
+      console.log("BG Color being calculated for text color:", backgroundColor);
       setTextColor(calculateTextColor(backgroundColor));
     } else {
       // Load manual text color from storage if in manual mode
-      chrome.storage.local.get('textColor', (result) => {
-        if (result.textColor) {
-          setTextColor(result.textColor);
+      chrome.storage.local.get(['darkTextColor', 'lightTextColor'], (result) => {
+        if (systemTheme === 'dark' && result.darkTextColor) {
+          setTextColor(result.darkTextColor);
+        } else if (systemTheme === 'light' && result.lightTextColor) {
+          setTextColor(result.lightTextColor);
         }
       });
     }
@@ -92,15 +135,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     // Save to chrome.storage
-    chrome.storage.local.set({ color: backgroundColor });
-    chrome.storage.local.set({ textColor: textColor });
+    handleSaveBackgroundColorAccordingToSystemTheme();
+    handleSaveTextColorAccordingToSystemTheme();
     console.log("SET Settings:", { color: backgroundColor, textColor: textColor });
-    // Optionally: chrome.storage.local.set({ isAutoTextColor });
 
-    // Debug logs
-    // console.log("Text color set to in ThemeContext:", textColor);
-    // console.log("Background color set to in ThemeContext:", backgroundColor);
-  }, [backgroundColor, colorHistory, textColor, isInitialized]);
+  }, [backgroundColor, colorHistory, textColor, isInitialized, systemTheme]);
 
   const setBackgroundColor = (color: string) => {
     setBackgroundColorState(color);
@@ -108,7 +147,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const setManualTextColor = (color: string) => {
     setTextColor(color);
-    chrome.storage.local.set({ textColor: color });
   };
 
   const clearHistory = () => {

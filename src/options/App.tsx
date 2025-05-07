@@ -4,20 +4,25 @@ import ThemeCustomizer from "./components/ThemeCustomizer";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import ExtensionSettings from "./components/ExtensionSettings";
 import ExtraOptions from "./components/ExtraOptions";
+import useSystemTheme from "../hooks/useSystemTheme";
 
 const ExtensionOptions = () => {
-  // const [bgType, setBgType] = useState<"image" | "color">("image");
-  // const [color, setColor] = useState("#23232b");
   const { setBackgroundColor, backgroundColor, textColor } = useTheme();
+  const systemTheme = useSystemTheme();
 
   useEffect(() => {
-    chrome.storage.local.get(["bgType", "color"], (result) => {
+    chrome.storage.local.get(["bgType", "darkBackgroundColor", "lightBackgroundColor"], (result) => {
       if (result.bgType === "color") {
-        setBackgroundColor(result.color);
-        console.log("Background color set to in ExtensionOptions:", result.color);
+        if (systemTheme === 'dark') {
+          setBackgroundColor(result.darkBackgroundColor);
+          console.log("Background color set to in ExtensionOptions:", result.darkBackgroundColor);
+        } else {
+          setBackgroundColor(result.lightBackgroundColor);
+          console.log("Background color set to in ExtensionOptions:", result.lightBackgroundColor);
+        }
       }
     });
-  }, []);
+  }, [systemTheme]);
 
   return (
     <div 

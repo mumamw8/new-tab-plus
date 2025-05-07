@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import ColorPicker from './PresetColors';
-import PresetColors from './ColorPicker';
 import { ChevronDown, ChevronUp, Palette } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import ColorPicker from './ColorPicker';
+import PresetColors from './PresetColors';
 
 const ThemeCustomizer: React.FC = () => {
   const { textColor } = useTheme();

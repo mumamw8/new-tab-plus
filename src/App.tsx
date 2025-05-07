@@ -5,7 +5,6 @@ import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
 import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
-import { calculateImageBrightness, getTextColorForBrightness } from "./options/utils/colorUtils";
 import { getImageUrl } from "./utils";
 import useSystemTheme from "./hooks/useSystemTheme";
 import useCardStyle from "./hooks/useCardStyle";
@@ -40,84 +39,70 @@ function App() {
     });
   }, []);
 
-  // Example: usage with file input
-  function handleGetImageBrightness(imageUrl: string): void {
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = imageUrl;
-
-    img.onload = async () => {
-      const brightness: number = calculateImageBrightness(img);
-      const textColor: string = getTextColorForBrightness(brightness);
-      console.log("Brightness:", brightness);
-      console.log("Text color:", textColor);
-      if (systemTheme === 'dark') {
-        setTextColor('#ffffff');
-        document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
-      } else {
-        setTextColor('#151516');
-        document.body.style.setProperty('--custom-text-color', '#151516', 'important');
-      }
-      // setTextColor(textColor);
-    };
-
-    img.onerror = () => {
-      console.warn("Failed to load image:", imageUrl);
-    };
+  const handleSetTextColorAccordingToSystemTheme = () => {
+    document.body.style.setProperty('--custom-text-color', "light-dark(#151516, #ffffff)", 'important');
+    if (systemTheme === 'dark') {
+      setTextColor('#ffffff');
+      // document.body.style.setProperty('--custom-text-color', '#ffffff', 'important');
+    } else {
+      setTextColor('#151516');
+      // document.body.style.setProperty('--custom-text-color', '#151516', 'important');
+    }
   }
+
+  const handleSetBackgroundOverlayColorAccordingToSystemTheme = () => {
+    if (systemTheme === 'dark') {
+      document.body.classList.add('custom-dark-transparent-background-color-class');
+    } else {
+      document.body.classList.add('custom-light-transparent-background-color-class');
+    }
+  }
+
+  // const handleSetDefaultBackgroundColorAccordingToSystemTheme = () => {}
 
   // Set App Background
   useEffect(() => {
     // get background and text color from storage
-    chrome.storage.local.get(["bgType", "color", "textColor"], (result) => {
-      console.log("Stored Theme info...", result);
+    chrome.storage.local.get(["bgType", "darkTextColor", "lightTextColor", "darkBackgroundColor", "lightBackgroundColor"], (result) => {
       const imageUrl = getImageUrl(window.innerWidth); // get image url based on window width for if image background is selected
       if (result.bgType === "color") {
-        // document.body.style.backgroundColor = result.color;
-        document.body.style.setProperty('--custom-background-color', result.color, 'important');
-        console.log("Background color set to:", result.color);
+        document.body.style.setProperty('--custom-background-color', `light-dark(${result.lightBackgroundColor ?? "#dde3e9"}, ${result.darkBackgroundColor ?? "#3c3c3c"})`, 'important');
+        console.log("Background color set to:", `light-dark(${result.lightBackgroundColor ?? "#dde3e9"}, ${result.darkBackgroundColor ?? "#3c3c3c"})`);
         // set background image to none
         document.body.style.setProperty('--custom-background-image', 'none', 'important');
       } else if (result.bgType === "image") {
-        // document.body.style.backgroundImage = `url(${result.image})`;
-        // document.body.style.setProperty('--custom-background-image', `url(${result.image})`, 'important');
-        // document.body.style.setProperty('--custom-background-image', `url(${'/background-15_x1032.jpg'})`, 'important');
-        if (systemTheme === 'dark') {
-          document.body.classList.add('custom-dark-transparent-background-color-class');
-        } else {
-          document.body.classList.add('custom-light-transparent-background-color-class');
-        }
+        handleSetBackgroundOverlayColorAccordingToSystemTheme();
         document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
-        console.log("Background image set to:", result.image);
       } else {
         // set background image to none
         document.body.style.setProperty('--custom-background-image', 'none', 'important');
-        // document.body.style.backgroundColor = "black";
-        document.body.style.setProperty('--custom-background-color', "#3c3c3c", 'important');
-        chrome.storage.local.get(["bgType", "color"], (result) => {
-          if (!result.bgType) {
-            chrome.storage.local
-              .set({ bgType: "color", color: "#3c3c3c" })
-              .then((result) => {
-                console.log(result);
-                console.log("Default background color set");
-              });
-          }
-        });
+        document.body.style.setProperty('--custom-background-color', "light-dark(#dde3e9, #3c3c3c)", 'important');
+        if (!result.bgType) {
+          chrome.storage.local
+            .set({ bgType: "color", color: "#3c3c3c", darkBackgroundColor: "#3c3c3c", lightBackgroundColor: "#dde3e9" })
+            .then((result) => {
+              console.log(result);
+              console.log("Default background color set");
+            });
+        }
       }
-      if (result.textColor && result.bgType === "color") {
-        setTextColor(result.textColor);
-        document.body.style.setProperty('--custom-text-color', result.textColor, 'important');
-        console.log("Text color set to:", result.textColor);
+      if (result.bgType === "color") {
+        if (systemTheme === 'dark') {
+          setTextColor(result.darkTextColor);
+          console.log("Dark text color set to:", result.darkTextColor);
+        } else {
+          setTextColor(result.lightTextColor);
+          console.log("Light text color set to:", result.lightTextColor);
+        }
+        document.body.style.setProperty('--custom-text-color', `light-dark(${result.lightTextColor ?? "#151516"}, ${result.darkTextColor ?? "#ffffff"})`, 'important');
+        console.log("Text color set to:", `light-dark(${result.lightTextColor ?? "#151516"}, ${result.darkTextColor ?? "#ffffff"})`);
       } else if (result.bgType === "image") {
-        handleGetImageBrightness(imageUrl);
+        handleSetTextColorAccordingToSystemTheme();
       } else {
-        setTextColor("#ffffff");
-        document.body.style.setProperty('--custom-text-color', "#ffffff", 'important');
-        console.log("Text color set to:", "#ffffff");
+        handleSetTextColorAccordingToSystemTheme();
       }
     });
-  }, []);
+  }, [systemTheme]);
 
   // Get Visibility Settings
   useEffect(() => {
