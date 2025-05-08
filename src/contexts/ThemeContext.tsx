@@ -214,6 +214,21 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           "custom-light-transparent-background-color-class"
         );
       }
+
+      // If text color is auto and background is image, set text color based on systemTheme
+      if (currentTheme.text.isAuto) {
+        const newTextColor = systemTheme === "dark" ? "#ffffff" : "#151516";
+
+        // Only update if the color is different to avoid infinite loop
+        if (currentTheme.text.color !== newTextColor) {
+          updateTheme({
+            text: {
+              ...currentTheme.text,
+              color: newTextColor,
+            },
+          });
+        }
+      }
     }
   }, [currentTheme, systemTheme]);
 
