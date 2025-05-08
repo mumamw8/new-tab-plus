@@ -230,7 +230,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         }
       }
     }
-  }, [currentTheme, systemTheme]);
+  }, [currentTheme]);
 
   // Listen for storage changes
   useEffect(() => {
