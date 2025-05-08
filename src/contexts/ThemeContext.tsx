@@ -8,6 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { calculateTextColor } from "../utils/colorUtils";
+import { getImageUrl } from "../utils";
 
 // Single storage key for the entire theme
 const THEME_STORAGE_KEY = "appTheme";
@@ -36,14 +37,14 @@ interface ThemeContextType {
   theme: ThemeData;
   systemTheme: "light" | "dark";
   updateTheme: (newTheme: Partial<ThemeData>) => void;
-  
+
   // Convenience methods that map to the old hooks
   textColor: string;
   backgroundColor: string;
   bgType: BackgroundType;
   cardStyle: CardStyle;
   isAutoTextColor: boolean;
-  
+
   updateTextColor: (color: string) => void;
   updateBackgroundColor: (color: string) => void;
   updateBgType: (type: BackgroundType) => void;
@@ -77,7 +78,7 @@ const defaultDarkTheme: ThemeData = {
 
 const defaultAppTheme: AppTheme = {
   light: defaultLightTheme,
-  dark: defaultDarkTheme
+  dark: defaultDarkTheme,
 };
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -109,7 +110,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Detect system theme
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
   const [appTheme, setAppTheme] = useState<AppTheme>(defaultAppTheme);
-  const [currentTheme, setCurrentTheme] = useState<ThemeData>(defaultLightTheme);
+  const [currentTheme, setCurrentTheme] =
+    useState<ThemeData>(defaultLightTheme);
 
   // Initialize system theme
   useEffect(() => {
@@ -135,8 +137,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const loadTheme = async () => {
       try {
         // Load theme from storage
-        const storedTheme = await getFromChromeStorage(THEME_STORAGE_KEY) as AppTheme | null;
-        
+        const storedTheme = (await getFromChromeStorage(
+          THEME_STORAGE_KEY
+        )) as AppTheme | null;
+
         if (storedTheme) {
           setAppTheme(storedTheme);
         } else {
@@ -164,33 +168,51 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
     // Apply text color
     document.body.style.setProperty(
-      '--custom-text-color', 
-      `light-dark(${currentTheme.text.color}, ${currentTheme.text.color})`, 
-      'important'
+      "--custom-text-color",
+      `light-dark(${currentTheme.text.color}, ${currentTheme.text.color})`,
+      "important"
     );
 
     // Apply background
     if (currentTheme.background.type === "color") {
-      document.body.style.setProperty('--custom-background-image', 'none', 'important');
       document.body.style.setProperty(
-        '--custom-background-color', 
-        `light-dark(${currentTheme.background.color}, ${currentTheme.background.color})`, 
-        'important'
+        "--custom-background-image",
+        "none",
+        "important"
       );
-      
+      document.body.style.setProperty(
+        "--custom-background-color",
+        `light-dark(${currentTheme.background.color}, ${currentTheme.background.color})`,
+        "important"
+      );
+
       // Remove any background image classes
-      document.body.classList.remove('custom-dark-transparent-background-color-class', 'custom-light-transparent-background-color-class');
+      document.body.classList.remove(
+        "custom-dark-transparent-background-color-class",
+        "custom-light-transparent-background-color-class"
+      );
     } else if (currentTheme.background.type === "image") {
       // Handle background image
       const imageUrl = getImageUrl(window.innerWidth);
-      document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
-      
+      document.body.style.setProperty(
+        "--custom-background-image",
+        `url(${imageUrl})`,
+        "important"
+      );
+
       // Add appropriate overlay class
-      document.body.classList.remove('custom-dark-transparent-background-color-class', 'custom-light-transparent-background-color-class');
-      if (systemTheme === 'dark') {
-        document.body.classList.add('custom-dark-transparent-background-color-class');
+      document.body.classList.remove(
+        "custom-dark-transparent-background-color-class",
+        "custom-light-transparent-background-color-class"
+      );
+      if (systemTheme === "dark") {
+        document.body.classList.add(
+          "custom-dark-transparent-background-color-class"
+        );
       } else {
-        document.body.classList.add('custom-light-transparent-background-color-class');
+        document.body.classList.add(
+          "custom-light-transparent-background-color-class"
+        );
       }
     }
   }, [currentTheme, systemTheme]);
@@ -216,7 +238,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const updateTheme = (updates: Partial<ThemeData>) => {
     // Create a new theme object with the updates
     const updatedTheme = { ...currentTheme, ...updates };
-    
+
     // Update the appropriate theme in appTheme
     const newAppTheme = { ...appTheme };
     if (systemTheme === "dark") {
@@ -224,34 +246,34 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     } else {
       newAppTheme.light = updatedTheme;
     }
-    
+
     // Update state
     setAppTheme(newAppTheme);
     setCurrentTheme(updatedTheme);
-    
+
     // Save to storage
     setToChromeStorage(THEME_STORAGE_KEY, newAppTheme);
-    
+
     // Auto-update text color if enabled and background color changed
     if (updates.background?.color && currentTheme.text.isAuto) {
       const newTextColor = calculateTextColor(updates.background.color);
-      
+
       // Update text color in the theme
       const themeWithAutoText = {
         ...updatedTheme,
         text: {
           ...updatedTheme.text,
-          color: newTextColor
-        }
+          color: newTextColor,
+        },
       };
-      
+
       // Update the appropriate theme in appTheme
       if (systemTheme === "dark") {
         newAppTheme.dark = themeWithAutoText;
       } else {
         newAppTheme.light = themeWithAutoText;
       }
-      
+
       // Update state and storage
       setAppTheme(newAppTheme);
       setCurrentTheme(themeWithAutoText);
@@ -264,8 +286,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     updateTheme({
       text: {
         ...currentTheme.text,
-        color
-      }
+        color,
+      },
     });
   };
 
@@ -273,8 +295,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     updateTheme({
       background: {
         ...currentTheme.background,
-        color
-      }
+        color,
+      },
     });
   };
 
@@ -282,25 +304,25 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     updateTheme({
       background: {
         ...currentTheme.background,
-        type
-      }
+        type,
+      },
     });
   };
 
   const updateCardStyle = (style: CardStyle) => {
     updateTheme({
-      cardStyle: style
+      cardStyle: style,
     });
   };
 
   const toggleIsAutoTextColor = () => {
     const newIsAuto = !currentTheme.text.isAuto;
-    
+
     updateTheme({
       text: {
         ...currentTheme.text,
-        isAuto: newIsAuto
-      }
+        isAuto: newIsAuto,
+      },
     });
 
     // If turning on auto text color, update text color based on background
@@ -309,8 +331,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       updateTheme({
         text: {
           color: newTextColor,
-          isAuto: newIsAuto
-        }
+          isAuto: newIsAuto,
+        },
       });
     }
   };
@@ -321,14 +343,14 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
         theme: currentTheme,
         systemTheme,
         updateTheme,
-        
+
         // Convenience properties and methods that map to the old hooks
         textColor: currentTheme.text.color,
         backgroundColor: currentTheme.background.color,
         bgType: currentTheme.background.type,
         cardStyle: currentTheme.cardStyle,
         isAutoTextColor: currentTheme.text.isAuto,
-        
+
         updateTextColor,
         updateBackgroundColor,
         updateBgType,
@@ -342,10 +364,10 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 };
 
 // Helper function to get image URL
-function getImageUrl(windowWidth: number): string {
-  return windowWidth > 1920
-    ? "https://source.unsplash.com/random/3840x2160/?nature,water,mountain"
-    : windowWidth > 1280
-    ? "https://source.unsplash.com/random/1920x1080/?nature,water,mountain"
-    : "https://source.unsplash.com/random/1280x720/?nature,water,mountain";
-}
+// function getImageUrl(windowWidth: number): string {
+//   return windowWidth > 1920
+//     ? "https://source.unsplash.com/random/3840x2160/?nature,water,mountain"
+//     : windowWidth > 1280
+//     ? "https://source.unsplash.com/random/1920x1080/?nature,water,mountain"
+//     : "https://source.unsplash.com/random/1280x720/?nature,water,mountain";
+// }
