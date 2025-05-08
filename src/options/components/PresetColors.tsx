@@ -1,8 +1,6 @@
 import React from 'react';
-import useBackgroundColor from '../../hooks/useBackgroundColor';
-import useTextColor from '../../hooks/useTextColor';
+import { useTheme } from '../../contexts/ThemeContext';
 import useColorHistory from '../../hooks/useColorHistory';
-// import { useTheme } from '../contexts/ThemeContext';
 
 const presets = [
   { name: 'Slate', color: '#64748b' },
@@ -30,9 +28,7 @@ const presets = [
 ];
 
 const PresetColors: React.FC = () => {
-  // const { backgroundColor, textColor, setBackgroundColor, colorHistory, clearHistory } = useTheme();
-  const { backgroundColor, updateBackgroundColor } = useBackgroundColor();
-  const { textColor } = useTextColor();
+  const { backgroundColor, textColor, updateBackgroundColor } = useTheme();
   const { colorHistory, clearHistory } = useColorHistory();
 
   return (

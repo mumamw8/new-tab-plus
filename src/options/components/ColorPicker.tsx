@@ -1,15 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { Moon, Sun, Copy, Check, Wand2 } from 'lucide-react';
 import { hexToRgb } from '../utils/colorUtils';
-import useBackgroundColor from '../../hooks/useBackgroundColor';
-import useTextColor from '../../hooks/useTextColor';
-import useIsAutoTextColor from '../../hooks/useIsAutoTextColor';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const ColorPicker: React.FC = () => {
-  const { backgroundColor, updateBackgroundColor } = useBackgroundColor();
-  const { textColor, updateTextColor } = useTextColor();
-  const { isAutoTextColor, toggleIsAutoTextColor } = useIsAutoTextColor();
-  // const { backgroundColor, textColor, setBackgroundColor, isAutoTextColor, setIsAutoTextColor, setManualTextColor } = useTheme();
+  const { 
+    backgroundColor, 
+    textColor, 
+    isAutoTextColor, 
+    updateBackgroundColor, 
+    updateTextColor, 
+    toggleIsAutoTextColor 
+  } = useTheme();
+  
   const [format, setFormat] = useState<'hex' | 'rgb'>('hex');
   const [copied, setCopied] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);

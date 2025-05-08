@@ -1,20 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Sun, Moon, Circle } from "lucide-react";
-import useCardStyle from "../../hooks/useCardStyle";
-import useTextColor from "../../hooks/useTextColor";
-export type Theme = "light" | "dark" | "neutral";
+import { useTheme, CardStyle } from "../../contexts/ThemeContext";
 
 const ItemsThemeSelector: React.FC = () => {
-  const { cardStyle, updateCardStyle } = useCardStyle();
+  const { cardStyle, textColor, updateCardStyle } = useTheme();
   const [sliderPosition, setSliderPosition] = useState(0);
   const buttonRefs = {
     light: useRef<HTMLButtonElement>(null),
     neutral: useRef<HTMLButtonElement>(null),
     dark: useRef<HTMLButtonElement>(null),
   };
-  const { textColor } = useTextColor();
 
-  const updateSliderPosition = (theme: Theme) => {
+  const updateSliderPosition = (theme: CardStyle) => {
     const button = buttonRefs[theme].current;
     if (button) {
       const container = button.parentElement;
@@ -39,7 +36,7 @@ const ItemsThemeSelector: React.FC = () => {
     document.documentElement.style.setProperty("--card-style", cardStyle);
   }, [cardStyle]);
 
-  const handleThemeChange = (theme: Theme) => {
+  const handleThemeChange = (theme: CardStyle) => {
     updateCardStyle(theme);
   };
 

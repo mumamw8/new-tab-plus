@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { ChevronDown, ChevronUp, Palette } from "lucide-react";
-// import { useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import ColorPicker from "./ColorPicker";
 import PresetColors from "./PresetColors";
-import useTextColor from "../../hooks/useTextColor";
 
 const ThemeCustomizer: React.FC = () => {
-  // const { textColor } = useTheme();
-  const { textColor } = useTextColor();
+  const { theme } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
+  
+  const textColor = theme.text.color;
 
   useEffect(() => {
     document.documentElement.style.setProperty(

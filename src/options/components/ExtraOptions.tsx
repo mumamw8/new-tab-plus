@@ -2,24 +2,11 @@ import { WallpaperIcon } from "lucide-react";
 import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import ItemsThemeSelector from "./ItemsThemeSelector";
-import useBackgroundType from "../../hooks/useBackgroundType";
-import useTextColor from "../../hooks/useTextColor";
 import { useState } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const ExtraOptions = () => {
-  // const { textColor } = useTheme();
-  // const [bgType, setBgType] = useState<"image" | "color">("color");
-
-  // useEffect(() => {
-  //   chrome.storage.local.get(["bgType"], (result) => {
-  //     if (result.bgType === "image" || result.bgType === "color") {
-  //       setBgType(result.bgType);
-  //     }
-  //     console.log("Background type:", result.bgType);
-  //   });
-  // }, []);
-  const { bgType, updateBgType } = useBackgroundType();
-  const { textColor } = useTextColor();
+  const { bgType, textColor, updateBgType } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
 
   const handleToggle = () => {

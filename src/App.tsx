@@ -4,21 +4,22 @@ import BookmarkList from "./components/BookmarkList";
 import { CircleChevronLeftIcon, EllipsisIcon } from "lucide-react";
 import ReadingList from "./components/ReadingList";
 import SuggestionsList from "./components/SuggestionsList";
-import { RootNodesVisibilitySettingsType, VisibilitySettingsType } from "./options/components/ExtensionSettings";
-import { getImageUrl } from "./utils";
-import useSystemTheme from "./hooks/useSystemTheme";
-import useCardStyle from "./hooks/useCardStyle";
+import {
+  RootNodesVisibilitySettingsType,
+  VisibilitySettingsType,
+} from "./options/components/ExtensionSettings";
+// import { getImageUrl } from "./utils";
 import clsx from "clsx";
-import useTextColor from "./hooks/useTextColor";
-import useBackgroundColor from "./hooks/useBackgroundColor";
-import useBackgroundType from "./hooks/useBackgroundType";
+import { useTheme } from "./contexts/ThemeContext";
 
 function App() {
-  const systemTheme = useSystemTheme();
-  const { cardStyle } = useCardStyle();
-  const { textColor } = useTextColor();
-  const { backgroundColor } = useBackgroundColor();
-  const { bgType } = useBackgroundType();
+  const {
+    // systemTheme,
+    cardStyle,
+    textColor,
+    // backgroundColor,
+    // bgType
+  } = useTheme();
 
   const [currentNodes, setCurrentNodes] = useState<
     chrome.bookmarks.BookmarkTreeNode[]
@@ -28,29 +29,36 @@ function App() {
   >([]);
   const [titleStack, setTitleStack] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [textPageColor, setTextPageColor] = useState<string>(textColor ?? "#ffffff");
-  const [visibilitySettings, setVisibilitySettings] = useState<VisibilitySettingsType>({
-    readingList: true,
-    suggestionsList: true
-  });
-  const [rootNodesVisibilitySettings, setRootNodesVisibilitySettings] = useState<RootNodesVisibilitySettingsType>({});
-  const [bookmarksVisibilitySettingsIsEmpty, setBookmarksVisibilitySettingsIsEmpty] = useState(true);
+  const [textPageColor, setTextPageColor] = useState<string>(
+    textColor ?? "#ffffff"
+  );
+  const [visibilitySettings, setVisibilitySettings] =
+    useState<VisibilitySettingsType>({
+      readingList: true,
+      suggestionsList: true,
+    });
+  const [rootNodesVisibilitySettings, setRootNodesVisibilitySettings] =
+    useState<RootNodesVisibilitySettingsType>({});
+  const [
+    bookmarksVisibilitySettingsIsEmpty,
+    setBookmarksVisibilitySettingsIsEmpty,
+  ] = useState(true);
 
-  const handleSetTextColorAccordingToSystemTheme = () => {
-    document.body.style.setProperty('--custom-text-color', "light-dark(#151516, #ffffff)", 'important');
-    if (systemTheme === 'dark') {
-      setTextPageColor('#ffffff');
-    } else {
-      setTextPageColor('#151516');
-    }
-  }
-  const handleSetBackgroundOverlayColorAccordingToSystemTheme = () => {
-    if (systemTheme === 'dark') {
-      document.body.classList.add('custom-dark-transparent-background-color-class');
-    } else {
-      document.body.classList.add('custom-light-transparent-background-color-class');
-    }
-  }
+  // const handleSetTextColorAccordingToSystemTheme = () => {
+  //   document.body.style.setProperty('--custom-text-color', "light-dark(#151516, #ffffff)", 'important');
+  //   if (systemTheme === 'dark') {
+  //     setTextPageColor('#ffffff');
+  //   } else {
+  //     setTextPageColor('#151516');
+  //   }
+  // }
+  // const handleSetBackgroundOverlayColorAccordingToSystemTheme = () => {
+  //   if (systemTheme === 'dark') {
+  //     document.body.classList.add('custom-dark-transparent-background-color-class');
+  //   } else {
+  //     document.body.classList.add('custom-light-transparent-background-color-class');
+  //   }
+  // }
 
   useEffect(() => {
     chrome.bookmarks.getTree((bookMarkTreeNodes) => {
@@ -63,87 +71,26 @@ function App() {
 
   useEffect(() => {
     setTextPageColor(textColor);
-  }, [textColor])
-
-  useEffect(() => {
-    const imageUrl = getImageUrl(window.innerWidth); // get image url based on window width for if image background is selected
-    document.body.style.setProperty('--custom-text-color', `light-dark(${textColor ?? "#151516"}, ${textColor ?? "#ffffff"})`, 'important');
-    if (bgType === "color") {
-      document.body.style.setProperty('--custom-background-image', 'none', 'important');
-      document.body.style.setProperty('--custom-background-color', `light-dark(${backgroundColor}, ${backgroundColor})`, 'important');
-    } else if (bgType === "image") {
-      handleSetBackgroundOverlayColorAccordingToSystemTheme();
-      handleSetTextColorAccordingToSystemTheme();
-      document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
-    } else {
-      document.body.style.setProperty('--custom-background-image', 'none', 'important');
-      document.body.style.setProperty('--custom-background-color', "light-dark(#dde3e9, #3c3c3c)", 'important');
-    }
-    // document.body.style.setProperty('--custom-text-color', `light-dark(${backgroundColor}, ${backgroundColor})`, 'important');
-  }, [textColor, bgType, backgroundColor])
-
-/*
-  // Set App Background
-  useEffect(() => {
-    // get background and text color from storage
-    chrome.storage.local.get(["bgType", "darkTextColor", "lightTextColor", "darkBackgroundColor", "lightBackgroundColor"], (result) => {
-      const imageUrl = getImageUrl(window.innerWidth); // get image url based on window width for if image background is selected
-      if (result.bgType === "color") {
-        document.body.style.setProperty('--custom-background-color', `light-dark(${result.lightBackgroundColor ?? "#dde3e9"}, ${result.darkBackgroundColor ?? "#3c3c3c"})`, 'important');
-        console.log("Background color set to:", `light-dark(${result.lightBackgroundColor ?? "#dde3e9"}, ${result.darkBackgroundColor ?? "#3c3c3c"})`);
-        // set background image to none
-        document.body.style.setProperty('--custom-background-image', 'none', 'important');
-      } else if (result.bgType === "image") {
-        handleSetBackgroundOverlayColorAccordingToSystemTheme();
-        document.body.style.setProperty('--custom-background-image', `url(${imageUrl})`, 'important');
-      } else {
-        // set background image to none
-        document.body.style.setProperty('--custom-background-image', 'none', 'important');
-        document.body.style.setProperty('--custom-background-color', "light-dark(#dde3e9, #3c3c3c)", 'important');
-        if (!result.bgType) {
-          chrome.storage.local
-            .set({ bgType: "color", color: "#3c3c3c", darkBackgroundColor: "#3c3c3c", lightBackgroundColor: "#dde3e9" })
-            .then((result) => {
-              console.log(result);
-              console.log("Default background color set");
-            });
-        }
-      }
-      // if (result.bgType === "color") {
-      //   if (systemTheme === 'dark') {
-      //     setTextColor(result.darkTextColor);
-      //     console.log("Dark text color set to:", result.darkTextColor);
-      //   } else {
-      //     setTextColor(result.lightTextColor);
-      //     console.log("Light text color set to:", result.lightTextColor);
-      //   }
-      //   document.body.style.setProperty('--custom-text-color', `light-dark(${result.lightTextColor ?? "#151516"}, ${result.darkTextColor ?? "#ffffff"})`, 'important');
-      //   console.log("Text color set to:", `light-dark(${result.lightTextColor ?? "#151516"}, ${result.darkTextColor ?? "#ffffff"})`);
-      // } else if (result.bgType === "image") {
-      //   handleSetTextColorAccordingToSystemTheme();
-      // } else {
-      //   handleSetTextColorAccordingToSystemTheme();
-      // }
-    });
-  }, [systemTheme]); 
-*/
+  }, [textColor]);
 
   // Get Visibility Settings
   useEffect(() => {
     chrome.storage.local.get("visibilitySettings", (result) => {
       if (result.visibilitySettings) {
         setVisibilitySettings(result.visibilitySettings);
-        // console.log("Visibility settings:", result.visibilitySettings);
       }
     });
   }, []);
+
   // Get Root Nodes Visibility Settings
   useEffect(() => {
     chrome.storage.local.get("rootNodesVisibilitySettings", (result) => {
-      if (result.rootNodesVisibilitySettings && Object.keys(result.rootNodesVisibilitySettings).length > 0) {
+      if (
+        result.rootNodesVisibilitySettings &&
+        Object.keys(result.rootNodesVisibilitySettings).length > 0
+      ) {
         setRootNodesVisibilitySettings(result.rootNodesVisibilitySettings);
         setBookmarksVisibilitySettingsIsEmpty(false);
-        // console.log("Root nodes visibility settings:", result.rootNodesVisibilitySettings);
       }
     });
   }, []);
@@ -166,7 +113,11 @@ function App() {
   const renderRootContent = () => {
     return currentNodes.map((node) => {
       if (!node.children || node.children.length === 0) return null;
-      if (!rootNodesVisibilitySettings[node.id] && !bookmarksVisibilitySettingsIsEmpty) return null;
+      if (
+        !rootNodesVisibilitySettings[node.id] &&
+        !bookmarksVisibilitySettingsIsEmpty
+      )
+        return null;
 
       return (
         <div key={node.id} className="mb-2">
@@ -191,23 +142,32 @@ function App() {
               className="flex items-center gap-2 opacity-70 font-bold text-lg cursor-pointer mr-10"
               onClick={handleBack}
             >
-              <CircleChevronLeftIcon color={textPageColor} className="w-6 h-6" />
+              <CircleChevronLeftIcon
+                color={textPageColor}
+                className="w-6 h-6"
+              />
             </button>
           )}
 
           <details className="dropdown ml-auto">
-            <summary className={clsx(`btn btn-link btn-circle btn-sm hover:backdrop-blur-sm custom-text-color`,
-              cardStyle === 'neutral' && 'hover:bg-white/5',
-              cardStyle === 'light' && 'hover:bg-white/20',
-              cardStyle === 'dark' && 'hover:bg-gray-900/20'
-            )}>
+            <summary
+              className={clsx(
+                `btn btn-link btn-circle btn-sm hover:backdrop-blur-sm custom-text-color`,
+                cardStyle === "neutral" && "hover:bg-white/5",
+                cardStyle === "light" && "hover:bg-white/20",
+                cardStyle === "dark" && "hover:bg-gray-900/20"
+              )}
+            >
               <EllipsisIcon color={textPageColor} className="w-4 h-4" />
             </summary>
-            <ul className={clsx("menu dropdown-content custom-text-color backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm",
-              cardStyle === 'neutral' && 'bg-white/5',
-              cardStyle === 'light' && 'bg-white/20',
-              cardStyle === 'dark' && 'bg-gray-900/20'
-            )}>
+            <ul
+              className={clsx(
+                "menu dropdown-content custom-text-color backdrop-blur-sm rounded-box mt-1 z-1 w-52 p-2 shadow-sm",
+                cardStyle === "neutral" && "bg-white/5",
+                cardStyle === "light" && "bg-white/20",
+                cardStyle === "dark" && "bg-gray-900/20"
+              )}
+            >
               <li>
                 <button
                   onClick={() => {

@@ -1,25 +1,7 @@
-import { useEffect, useState } from "react";
-import {
-  IS_AUTO_TEXT_COLOR_STORAGE_KEY,
-  storeIsAutoTextColor,
-} from "../utils/chromeStorage";
+import { useTheme } from "../contexts/ThemeContext";
 
 function useIsAutoTextColor() {
-  const [isAutoTextColor, setIsAutoTextColor] = useState<boolean>(true);
-
-  const toggleIsAutoTextColor = () => {
-    const newIsAutoTextColor = !isAutoTextColor;
-    storeIsAutoTextColor(newIsAutoTextColor);
-    setIsAutoTextColor(newIsAutoTextColor);
-  };
-
-  useEffect(() => {
-    chrome.storage.local.get(IS_AUTO_TEXT_COLOR_STORAGE_KEY, (result) => {
-      if (typeof result.isAutoTextColor === "boolean") {
-        setIsAutoTextColor(result.isAutoTextColor);
-      }
-    });
-  }, []);
+  const { isAutoTextColor, toggleIsAutoTextColor } = useTheme();
 
   return { isAutoTextColor, toggleIsAutoTextColor };
 }
