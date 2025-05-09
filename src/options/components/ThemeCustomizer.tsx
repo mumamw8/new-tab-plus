@@ -15,7 +15,7 @@ const ThemeCustomizer: React.FC = () => {
       "--customizer-bg-color",
       textColor === "#ffffff"
         ? "rgba(40, 40, 40, 0.85)"
-        : "rgba(255, 255, 255, 0.85)"
+        : "rgba(140, 140, 140, 0.15)"
     );
   }, [textColor]);
 

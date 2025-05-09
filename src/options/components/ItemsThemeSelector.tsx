@@ -54,7 +54,7 @@ const ItemsThemeSelector: React.FC = () => {
             backgroundColor: `${
               textColor === "#ffffff"
                 ? "rgba(40, 40, 40, 0.85)"
-                : "rgba(255, 255, 255, 0.85)"
+                : "rgba(140, 140, 140, 0.15)"
             }`,
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",

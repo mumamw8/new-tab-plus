@@ -18,7 +18,7 @@ const ExtraOptions = () => {
     <div 
       className="w-90 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out shadow-xl flex flex-col gap-4"
       style={{ 
-        backgroundColor: `${textColor === '#ffffff' ? 'rgba(40, 40, 40, 0.85)' : 'rgba(255, 255, 255, 0.85)'}`,
+        backgroundColor: `${textColor === '#ffffff' ? 'rgba(40, 40, 40, 0.85)' : 'rgba(140, 140, 140, 0.15)'}`,
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         transform: isOpen ? 'translateY(0)' : 'translateY(calc(100% - 48px))',
