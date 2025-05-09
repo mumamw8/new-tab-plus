@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 // import { useTheme } from '../contexts/ThemeContext';
 import { ChevronDown, ChevronUp, SettingsIcon } from 'lucide-react';
 import VisibilitySettings from './VisiblitySettings';
-import useTextColor from '../../hooks/useTextColor';
-
+import { useTheme } from '../../contexts/ThemeContext';
 export type VisibilitySettingsType = {
   readingList: boolean;
   suggestionsList: boolean;
@@ -14,14 +13,14 @@ export type RootNodesVisibilitySettingsType = {
 
 const ExtensionSettings: React.FC = () => {
   // const { textColor } = useTheme();
-  const { textColor } = useTextColor();
+  const { textColor, backgroundColor } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div 
       className="w-80 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out shadow-xl flex flex-col gap-4"
       style={{ 
-        backgroundColor: `${textColor === '#ffffff' ? 'rgba(40, 40, 40, 0.85)' : 'rgba(140, 140, 140, 0.15)'}`,
+        backgroundColor: `${backgroundColor}10`,
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         transform: isOpen ? 'translateY(0)' : 'translateY(calc(100% - 48px))',

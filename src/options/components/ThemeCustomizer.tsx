@@ -5,19 +5,14 @@ import ColorPicker from "./ColorPicker";
 import PresetColors from "./PresetColors";
 
 const ThemeCustomizer: React.FC = () => {
-  const { theme } = useTheme();
+  const { theme, backgroundColor } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
   
   const textColor = theme.text.color;
 
   useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--customizer-bg-color",
-      textColor === "#ffffff"
-        ? "rgba(40, 40, 40, 0.85)"
-        : "rgba(140, 140, 140, 0.15)"
-    );
-  }, [textColor]);
+    document.documentElement.style.setProperty("--customizer-bg-color",`${backgroundColor}10`);
+  }, [backgroundColor]);
 
   return (
     <div

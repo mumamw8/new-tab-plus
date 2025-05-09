@@ -5,12 +5,9 @@ import ExtraOptions from "./components/ExtraOptions";
 // import { useTheme } from "../contexts/ThemeContext";
 
 const ExtensionOptions = () => {
-  // const { theme } = useTheme();
-
   return (
     <div
       className="min-h-screen w-full flex flex-col transition-colors duration-300 ease-in-out p-4 md:p-8"
-      // style={{ backgroundColor: theme.background.color, color: theme.text.color }}
     >
       <div className="flex flex-wrap-reverse w-full justify-end gap-4">
         {/* Settings Container */}

@@ -5,6 +5,33 @@
     <link rel="icon" type="image/svg+xml" href="/icon48.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Tab Pro - Options Page</title>
+    <style>
+      /* Apply appropriate theme based on system preference */
+      :root {
+        color-scheme: light dark;
+      }
+      
+      /* Light mode styles */
+      @media (prefers-color-scheme: light) {
+        html, body {
+          background-color: #dde3e9;
+          color: #151516;
+        }
+      }
+      
+      /* Dark mode styles */
+      @media (prefers-color-scheme: dark) {
+        html, body {
+          background-color: #3c3c3c;
+          color: #ffffff;
+        }
+      }
+      
+      /* Smooth transition once the app loads */
+      body {
+        transition: background-color 0.2s ease, color 0.2s ease;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

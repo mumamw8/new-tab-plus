@@ -3,7 +3,7 @@ import { Sun, Moon, Circle } from "lucide-react";
 import { useTheme, CardStyle } from "../../contexts/ThemeContext";
 
 const ItemsThemeSelector: React.FC = () => {
-  const { cardStyle, textColor, updateCardStyle } = useTheme();
+  const { cardStyle, textColor, updateCardStyle, backgroundColor } = useTheme();
   const [sliderPosition, setSliderPosition] = useState(0);
   const buttonRefs = {
     light: useRef<HTMLButtonElement>(null),
@@ -51,11 +51,7 @@ const ItemsThemeSelector: React.FC = () => {
         <div
           className="absolute rounded-full shadow-md transition-all duration-300 ease-in-out"
           style={{
-            backgroundColor: `${
-              textColor === "#ffffff"
-                ? "rgba(40, 40, 40, 0.85)"
-                : "rgba(140, 140, 140, 0.15)"
-            }`,
+            backgroundColor: `${backgroundColor}10`,
             backdropFilter: "blur(12px)",
             WebkitBackdropFilter: "blur(12px)",
             transform: `translateX(${sliderPosition}px)`,
