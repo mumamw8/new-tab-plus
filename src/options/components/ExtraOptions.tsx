@@ -45,7 +45,7 @@ const ExtraOptions = () => {
         <div className="w-full flex flex-col gap-2">
           <span className="text-xs font-medium">Background Style</span>
           <div className="flex flex-col rounded-lg justify-center gap-2 p-2" style={{ backgroundColor: `${textColor}10` }}>
-            <span className="custom-text-color">Background Images {bgType === "image" ? "On" : "Off"}</span>
+            <span className="custom-text-color">Random Background Images {bgType === "image" ? "On" : "Off"}</span>
             <button
               className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
                 bgType === "image" ? "bg-blue-500" : "bg-gray-400"

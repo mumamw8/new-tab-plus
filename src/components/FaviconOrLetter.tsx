@@ -32,10 +32,6 @@ const FaviconOrLetter: React.FC<{ title: string; url: string; iconSize: number }
     img.src = faviconURL(url, iconSize.toString());
   }, [url, iconSize]);
 
-  if (src === undefined) {
-    return null;
-  }
-
   return <div 
     className={clsx(
       `relative flex items-center justify-center w-16 h-16 mb-2 rounded-2xl backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`,
@@ -44,7 +40,9 @@ const FaviconOrLetter: React.FC<{ title: string; url: string; iconSize: number }
       cardStyle === 'dark' && 'bg-gray-900/20'
     )}
   >
-    {error ? (
+    {src === undefined ? (
+      <div className="animate-pulse bg-gray-300 rounded-lg" style={{ width: itemSize, height: itemSize }} />
+    ) : error ? (
       <span
         className="inline-flex items-center justify-center bg-gray-300 rounded-full font-bold text-gray-700 mb-2"
         style={{ width: itemSize, height: itemSize, fontSize: itemSize * 0.7 }}

@@ -4,18 +4,28 @@ import clsx from "clsx";
 import useCardStyle from "../hooks/useCardStyle";
 
 function sortHistoryItemsByTypedCount(historyItems: chrome.history.HistoryItem[]): chrome.history.HistoryItem[] {
-  // Filter out items with no typedCount or typedCount of 0
+  // Filter out items that have neither typedCount nor visitCount, and blacklist chrome URLs
   const filteredItems = historyItems.filter(item => 
-    item.typedCount !== undefined && item.typedCount > 0
+    // Check if URL exists and doesn't start with 'chrome'
+    item.url && !item.url.toLowerCase().startsWith('chrome') &&
+    // Keep items that have either typedCount or visitCount
+    ((item.typedCount !== undefined && item.typedCount > 0) || 
+    (item.visitCount !== undefined && item.visitCount > 0))
   );
 
   return [...filteredItems].sort((a, b) => {
-    // Handle undefined typedCount values
-    const aCount = a.typedCount ?? 0;
-    const bCount = b.typedCount ?? 0;
+    // Handle undefined values by defaulting to 0
+    const aTypedCount = a.typedCount ?? 0;
+    const bTypedCount = b.typedCount ?? 0;
+    const aVisitCount = a.visitCount ?? 0;
+    const bVisitCount = b.visitCount ?? 0;
     
-    // Sort in descending order (higher typedCount values first)
-    return bCount - aCount;
+    // Calculate total score by adding typedCount and visitCount
+    const aTotal = aTypedCount + aVisitCount;
+    const bTotal = bTypedCount + bVisitCount;
+    
+    // Sort in descending order (higher total values first)
+    return bTotal - aTotal;
   });
 }
 
