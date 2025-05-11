@@ -12,6 +12,7 @@ import { getImageUrl } from "../utils";
 
 // Single storage key for the entire theme
 const THEME_STORAGE_KEY = "appTheme";
+const THEME_STORAGE_KEY_LOCAL = "appThemeLocal";
 
 export type BackgroundType = "image" | "color";
 export type CardStyle = "light" | "dark" | "neutral";
@@ -106,22 +107,62 @@ const setToChromeStorage = async (key: string, value: any) => {
   });
 };
 
+// Helper function to get initial theme synchronously
+const getInitialTheme = (): AppTheme => {
+  try {
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY_LOCAL);
+    if (storedTheme) {
+      return JSON.parse(storedTheme);
+    }
+  } catch (error) {
+    console.error("Error reading theme from localStorage:", error);
+  }
+  return defaultAppTheme;
+};
+
+// Helper function to get system theme synchronously
+const getInitialSystemTheme = (): "light" | "dark" => {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+};
+
+// Helper function to apply theme styles synchronously
+const applyThemeStyles = (theme: ThemeData) => {
+  // Apply text color
+  document.documentElement.style.setProperty(
+    "--custom-text-color",
+    `light-dark(${theme.text.color}, ${theme.text.color})`,
+    "important"
+  );
+
+  // Apply background
+  if (theme.background.type === "color") {
+    document.documentElement.style.setProperty(
+      "--custom-background-image",
+      "none",
+      "important"
+    );
+    document.documentElement.style.setProperty(
+      "--custom-background-color",
+      `light-dark(${theme.background.color}, ${theme.background.color})`,
+      "important"
+    );
+  }
+};
+
+// Apply initial theme synchronously
+const initialTheme = getInitialTheme();
+const initialSystemTheme = getInitialSystemTheme();
+const initialCurrentTheme = initialSystemTheme === "dark" ? initialTheme.dark : initialTheme.light;
+applyThemeStyles(initialCurrentTheme);
+
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  // Detect system theme
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">("light");
-  const [appTheme, setAppTheme] = useState<AppTheme>(defaultAppTheme);
-  const [currentTheme, setCurrentTheme] =
-    useState<ThemeData>(defaultLightTheme);
+  // Initialize with synchronous values
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(initialSystemTheme);
+  const [appTheme, setAppTheme] = useState<AppTheme>(initialTheme);
+  const [currentTheme, setCurrentTheme] = useState<ThemeData>(initialCurrentTheme);
 
   // Initialize system theme
   useEffect(() => {
-    const getSystemTheme = () =>
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-
-    setSystemTheme(getSystemTheme());
-
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = (e: MediaQueryListEvent) => {
       setSystemTheme(e.matches ? "dark" : "light");
@@ -143,9 +184,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
         if (storedTheme) {
           setAppTheme(storedTheme);
+          // Update localStorage as fallback
+          localStorage.setItem(THEME_STORAGE_KEY_LOCAL, JSON.stringify(storedTheme));
         } else {
           // If no theme is stored, use default and save it
           await setToChromeStorage(THEME_STORAGE_KEY, defaultAppTheme);
+          localStorage.setItem(THEME_STORAGE_KEY_LOCAL, JSON.stringify(defaultAppTheme));
         }
       } catch (error) {
         console.error("Error loading theme:", error);
@@ -159,7 +203,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   // Update current theme when system theme or app theme changes
   useEffect(() => {
-    setCurrentTheme(systemTheme === "dark" ? appTheme.dark : appTheme.light);
+    const newTheme = systemTheme === "dark" ? appTheme.dark : appTheme.light;
+    setCurrentTheme(newTheme);
+    applyThemeStyles(newTheme);
   }, [systemTheme, appTheme]);
 
   // Apply theme to document
