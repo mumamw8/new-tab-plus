@@ -1,4 +1,4 @@
-# New Tab Pro
+# New Tab Plus
 
 A customizable, modern Chrome extension that transforms your new tab page into a powerful dashboard for bookmarks and reading list management, with beautiful theming options.
 
@@ -34,7 +34,7 @@ A customizable, modern Chrome extension that transforms your new tab page into a
 1. **Clone this repository:**
    ```sh
    git clone <your-repo-url>
-   cd new-tab-pro
+   cd new-tab-plus
    ```
 
 2. **Install dependencies:**
