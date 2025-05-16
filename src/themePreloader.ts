@@ -89,6 +89,7 @@ const applyThemeStyles = (theme: ThemeData) => {
       `light-dark(${theme.background.color}, ${theme.background.color})`,
       "important"
     );
+    document.body.classList.remove("custom-wallpaper-background-color-class");
   } else if (
     theme.background.type === "wallpaper" &&
     theme.background.wallpaper
@@ -103,6 +104,7 @@ const applyThemeStyles = (theme: ThemeData) => {
       "transparent",
       "important"
     );
+    document.body.classList.add("custom-wallpaper-background-color-class");
   }
 };
 
