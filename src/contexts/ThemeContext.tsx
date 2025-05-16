@@ -25,6 +25,10 @@ export interface ThemeData {
     type: BackgroundType;
     color: string;
     wallpaper?: string; // Path to selected wallpaper
+    wallpaperCredit?: {
+      name: string;
+      url: string;
+    };
   };
   cardStyle: CardStyle;
 }

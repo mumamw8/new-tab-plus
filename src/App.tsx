@@ -18,7 +18,8 @@ function App() {
     cardStyle,
     textColor,
     // backgroundColor,
-    // bgType
+    bgType,
+    theme
   } = useTheme();
 
   const [currentNodes, setCurrentNodes] = useState<
@@ -209,6 +210,18 @@ function App() {
         {visibilitySettings.suggestionsList && <SuggestionsList />}
         {visibilitySettings.readingList && <ReadingList />}
       </div>
+      {bgType === 'wallpaper' && theme.background.wallpaperCredit && (
+        <a
+          href={theme.background.wallpaperCredit.url}
+          className="fixed bottom-4 left-4 px-3 py-1.5 rounded-full text-sm backdrop-blur-sm transition-all duration-300 hover:opacity-80 max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap hover:max-w-xs"
+          style={{
+            backgroundColor: `${textColor}10`,
+            color: textColor
+          }}
+        >
+          {theme.background.wallpaperCredit.name}
+        </a>
+      )}
     </div>
   );
 }

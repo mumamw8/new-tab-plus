@@ -43,11 +43,15 @@ const ExtraOptions = () => {
         </button>
       </div>
       <div className="p-4 overflow-y-auto max-h-[calc(80vh-48px)]">
+        {/* Card Style Options */}
+        <ItemsThemeSelector />
+        <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
+        {/* Wallpaper Settings */}
         <div className="w-full flex flex-col gap-2">
           <span className="text-xs font-medium">Background Style</span>
           <div className="flex flex-col rounded-lg justify-center gap-2 p-2" style={{ backgroundColor: `${textColor}10` }}>
             <div className="flex items-center justify-between">
-              <span className="custom-text-color">Custom Wallpaper {bgType === "wallpaper" ? "On" : "Off"}</span>
+              <span className="custom-text-color">Wallpaper {bgType === "wallpaper" ? "On" : "Off"}</span>
               <button
                 className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
                   bgType === "wallpaper" ? "bg-blue-500" : "bg-gray-400"
@@ -64,12 +68,10 @@ const ExtraOptions = () => {
           </div>
           {bgType === "wallpaper" && (
             <>
-              <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
+              {/* <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div> */}
               <WallpaperSelector />
             </>
           )}
-          <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
-          <ItemsThemeSelector />
         </div>
       </div>
     </div>

@@ -8,7 +8,6 @@ interface WallpaperInfo {
   credit?: {
     name: string;
     url: string;
-    description?: string;
   };
 }
 
@@ -25,63 +24,56 @@ const WALLPAPERS: Record<string, WallpaperInfo> = {
     filename: 'pexels-samuel-hajnik-3231550.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Samuel Hájnik: https://www.pexels.com/photo/green-grass-and-trees-near-rocky-mountains-14584904/',
+      name: 'Photo by Samuel Hájnik',
       url: 'https://www.pexels.com/photo/green-grass-and-trees-near-rocky-mountains-14584904/',
-      description: 'Green grass and trees near rocky mountains'
     }
   },
   'pexels-dr-failov-2151930529.jpg': {
     filename: 'pexels-dr-failov-2151930529.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Dr Failov: https://www.pexels.com/photo/aerial-view-of-green-forest-with-circular-structure-31984778/',
+      name: 'Photo by Dr Failov',
       url: 'https://www.pexels.com/photo/aerial-view-of-green-forest-with-circular-structure-31984778/',
-      description: 'Aerial view of green forest with circular structure'
     }
   },
   'pexels-jplenio-2080960.jpg': {
     filename: 'pexels-jplenio-2080960.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Johannes Plenio: https://www.pexels.com/photo/silhouette-of-person-riding-boat-2080960/',
+      name: 'Photo by Johannes Plenio',
       url: 'https://www.pexels.com/photo/silhouette-of-person-riding-boat-2080960/',
-      description: 'Silhouette of person riding boat'
     }
   },
   'pexels-leonie-fahjen-20345-92866.jpg': {
     filename: 'pexels-leonie-fahjen-20345-92866.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Leonie Fahjen: https://www.pexels.com/photo/cars-parked-near-buildings-during-daytime-92866/',
+      name: 'Photo by Leonie Fahjen',
       url: 'https://www.pexels.com/photo/cars-parked-near-buildings-during-daytime-92866/',
-      description: 'Cars parked near buildings during daytime'
     }
   },
   'pexels-apyfz-30136066.jpg': {
     filename: 'pexels-apyfz-30136066.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Mohammed Alim: https://www.pexels.com/photo/vibrant-jakarta-night-skyline-with-light-streaks-30136066/',
+      name: 'Photo by Mohammed Alim',
       url: 'https://www.pexels.com/photo/vibrant-jakarta-night-skyline-with-light-streaks-30136066/',
-      description: 'Vibrant Jakarta night skyline with light streaks'
     }
   },
   'pexels-pixabay-207153.jpg': {
     filename: 'pexels-pixabay-207153.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Pixabay: https://www.pexels.com/photo/gray-tunnel-207153/',
+      name: 'Photo by Pixabay',
       url: 'https://www.pexels.com/photo/gray-tunnel-207153/',
-      description: 'Gray tunnel'
     }
   },
   'pexels-jesserphotonyc-30649768.jpg': {
     filename: 'pexels-jesserphotonyc-30649768.jpg',
     textColor: '#ffffff',
     credit: {
-      name: 'Photo by Jesse R: https://www.pexels.com/photo/vibrant-times-square-after-rain-at-dusk-30649768/',
+      name: 'Photo by Jesse R',
       url: 'https://www.pexels.com/photo/vibrant-times-square-after-rain-at-dusk-30649768/',
-      description: 'Vibrant Times Square after rain at dusk'
     }
   }
 };
@@ -101,7 +93,8 @@ const WallpaperSelector: React.FC = () => {
       background: {
         ...theme.background,
         type: 'wallpaper',
-        wallpaper: wallpaperKey
+        wallpaper: wallpaperKey,
+        wallpaperCredit: wallpaper.credit
       },
       text: {
         ...theme.text,
