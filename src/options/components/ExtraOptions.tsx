@@ -2,6 +2,7 @@ import { WallpaperIcon } from "lucide-react";
 import { ChevronUp } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import ItemsThemeSelector from "./ItemsThemeSelector";
+import WallpaperSelector from "./WallpaperSelector";
 import { useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 
@@ -9,8 +10,8 @@ const ExtraOptions = () => {
   const { bgType, textColor, updateBgType, backgroundColor } = useTheme();
   const [isOpen, setIsOpen] = useState(true);
 
-  const handleToggle = () => {
-    const newType = bgType === "image" ? "color" : "image";
+  const handleWallpaperToggle = () => {
+    const newType = bgType === "wallpaper" ? "color" : "wallpaper";
     updateBgType(newType);
   };
 
@@ -45,20 +46,28 @@ const ExtraOptions = () => {
         <div className="w-full flex flex-col gap-2">
           <span className="text-xs font-medium">Background Style</span>
           <div className="flex flex-col rounded-lg justify-center gap-2 p-2" style={{ backgroundColor: `${textColor}10` }}>
-            <span className="custom-text-color">Random Background Images {bgType === "image" ? "On" : "Off"}</span>
-            <button
-              className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
-                bgType === "image" ? "bg-blue-500" : "bg-gray-400"
-              }`}
-              onClick={handleToggle}
-            >
-              <span
-                className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
-                  bgType === "image" ? "translate-x-6" : ""
+            <div className="flex items-center justify-between">
+              <span className="custom-text-color">Custom Wallpaper {bgType === "wallpaper" ? "On" : "Off"}</span>
+              <button
+                className={`w-12 h-6 flex items-center rounded-full p-1 transition-colors duration-300 ${
+                  bgType === "wallpaper" ? "bg-blue-500" : "bg-gray-400"
                 }`}
-              />
-            </button>
+                onClick={handleWallpaperToggle}
+              >
+                <span
+                  className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                    bgType === "wallpaper" ? "translate-x-6" : ""
+                  }`}
+                />
+              </button>
+            </div>
           </div>
+          {bgType === "wallpaper" && (
+            <>
+              <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
+              <WallpaperSelector />
+            </>
+          )}
           <div className="h-px my-4" style={{ backgroundColor: `${textColor}20` }}></div>
           <ItemsThemeSelector />
         </div>

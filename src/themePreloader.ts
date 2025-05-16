@@ -7,8 +7,9 @@ interface ThemeData {
     isAuto: boolean;
   };
   background: {
-    type: "image" | "color";
+    type: "color" | "wallpaper";
     color: string;
+    wallpaper?: string;
   };
   cardStyle: "light" | "dark" | "neutral";
 }
@@ -86,6 +87,20 @@ const applyThemeStyles = (theme: ThemeData) => {
     document.documentElement.style.setProperty(
       "--custom-background-color",
       `light-dark(${theme.background.color}, ${theme.background.color})`,
+      "important"
+    );
+  } else if (
+    theme.background.type === "wallpaper" &&
+    theme.background.wallpaper
+  ) {
+    document.documentElement.style.setProperty(
+      "--custom-background-image",
+      `url(/wallpapers/${theme.background.wallpaper})`,
+      "important"
+    );
+    document.documentElement.style.setProperty(
+      "--custom-background-color",
+      "transparent",
       "important"
     );
   }

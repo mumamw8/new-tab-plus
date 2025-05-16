@@ -8,13 +8,12 @@ import {
   ReactNode,
 } from "react";
 import { calculateTextColor } from "../utils/colorUtils";
-import { getImageUrl } from "../utils";
 
 // Single storage key for the entire theme
 const THEME_STORAGE_KEY = "appTheme";
 const THEME_STORAGE_KEY_LOCAL = "appThemeLocal";
 
-export type BackgroundType = "image" | "color";
+export type BackgroundType = "color" | "wallpaper";
 export type CardStyle = "light" | "dark" | "neutral";
 
 export interface ThemeData {
@@ -25,6 +24,7 @@ export interface ThemeData {
   background: {
     type: BackgroundType;
     color: string;
+    wallpaper?: string; // Path to selected wallpaper
   };
   cardStyle: CardStyle;
 }
@@ -235,46 +235,21 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       // Remove any background image classes
       document.body.classList.remove(
         "custom-dark-transparent-background-color-class",
-        "custom-light-transparent-background-color-class"
+        "custom-light-transparent-background-color-class",
+        "custom-wallpaper-background-color-class"
       );
-    } else if (currentTheme.background.type === "image") {
-      // Handle background image
-      const imageUrl = getImageUrl(window.innerWidth);
+    } else if (currentTheme.background.type === "wallpaper" && currentTheme.background.wallpaper) {
       document.body.style.setProperty(
         "--custom-background-image",
-        `url(${imageUrl})`,
+        `url(/wallpapers/${currentTheme.background.wallpaper})`,
         "important"
       );
-
-      // Add appropriate overlay class
-      document.body.classList.remove(
-        "custom-dark-transparent-background-color-class",
-        "custom-light-transparent-background-color-class"
+      document.body.style.setProperty(
+        "--custom-background-color",
+        "transparent",
+        "important"
       );
-      if (systemTheme === "dark") {
-        document.body.classList.add(
-          "custom-dark-transparent-background-color-class"
-        );
-      } else {
-        document.body.classList.add(
-          "custom-light-transparent-background-color-class"
-        );
-      }
-
-      // If text color is auto and background is image, set text color based on systemTheme
-      if (currentTheme.text.isAuto) {
-        const newTextColor = systemTheme === "dark" ? "#ffffff" : "#151516";
-
-        // Only update if the color is different to avoid infinite loop
-        if (currentTheme.text.color !== newTextColor) {
-          updateTheme({
-            text: {
-              ...currentTheme.text,
-              color: newTextColor,
-            },
-          });
-        }
-      }
+      document.body.classList.add("custom-wallpaper-background-color-class");
     }
   }, [currentTheme]);
 
@@ -315,8 +290,31 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     // Save to storage
     setToChromeStorage(THEME_STORAGE_KEY, newAppTheme);
 
-    // Auto-update text color if enabled and background color changed
-    if (updates.background?.color && currentTheme.text.isAuto) {
+    // First check if text color is explicitly updated
+    if (updates.text?.color) {
+      // If text color is explicitly updated, ensure it's applied
+      const themeWithText = {
+        ...updatedTheme,
+        text: {
+          ...updatedTheme.text,
+          color: updates.text.color,
+        },
+      };
+
+      // Update the appropriate theme in appTheme
+      if (systemTheme === "dark") {
+        newAppTheme.dark = themeWithText;
+      } else {
+        newAppTheme.light = themeWithText;
+      }
+
+      // Update state and storage
+      setAppTheme(newAppTheme);
+      setCurrentTheme(themeWithText);
+      setToChromeStorage(THEME_STORAGE_KEY, newAppTheme);
+    }
+    // Then check for auto text color update if background color changed
+    else if (updates.background?.color && currentTheme.text.isAuto) {
       const newTextColor = calculateTextColor(updates.background.color);
 
       // Update text color in the theme
