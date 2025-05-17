@@ -2,9 +2,10 @@ import "../App.css";
 import ThemeCustomizer from "./components/ThemeCustomizer";
 import ExtensionSettings from "./components/ExtensionSettings";
 import ExtraOptions from "./components/ExtraOptions";
-// import { useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 
 const ExtensionOptions = () => {
+  const { textColor } = useTheme();
   return (
     <div
       className="min-h-screen w-full flex flex-col transition-colors duration-300 ease-in-out p-4 md:p-8"
@@ -22,6 +23,18 @@ const ExtensionOptions = () => {
           <ExtraOptions />
         </div>
       </div>
+      <a
+          href={'https://tally.so/r/mYyZg0'}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="fixed bottom-4 left-4 px-3 py-1.5 rounded-full text-sm backdrop-blur-sm transition-all duration-300 hover:opacity-80 max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap hover:max-w-xs"
+          style={{
+            backgroundColor: `${textColor}10`,
+            color: textColor
+          }}
+        >
+          Report Issue or Give Feedback
+        </a>
     </div>
   );
 };

@@ -2,30 +2,40 @@ import React from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import useColorHistory from '../../hooks/useColorHistory';
 
-const presets = [
-  { name: 'Slate', color: '#64748b' },
-  { name: 'Red', color: '#ef4444' },
-  { name: 'Orange', color: '#f97316' },
-  { name: 'Amber', color: '#f59e0b' },
-  { name: 'Yellow', color: '#eab308' },
-  { name: 'Lime', color: '#84cc16' },
-  { name: 'Green', color: '#22c55e' },
-  { name: 'Emerald', color: '#10b981' },
-  { name: 'Teal', color: '#14b8a6' },
-  { name: 'Cyan', color: '#06b6d4' },
-  { name: 'Sky', color: '#0ea5e9' },
-  { name: 'Blue', color: '#3b82f6' },
-  { name: 'Indigo', color: '#6366f1' },
-  { name: 'Violet', color: '#8b5cf6' },
-  { name: 'Purple', color: '#a855f7' },
-  { name: 'Fuchsia', color: '#d946ef' },
-  { name: 'Pink', color: '#ec4899' },
-  { name: 'Rose', color: '#f43f5e' },
-  { name: 'Cool Gray', color: '#f0f0f0' }, // Common light gray
-  { name: 'Light Blue', color: '#e0f7fa' }, // Light blue often seen
-  { name: 'Light Green', color: '#e8f5e9' }, // Light green variant
-  { name: 'Dark Blue Gray', color: '#37474f' }, // Darker, muted tone
+const darkPresetColorObjects = [
+  { name: "Charcoal Gray", color: "#343d3f" },
+  { name: "Graphite", color: "#3c3c3c" },
+  { name: "Slate Blue", color: "#333c4d" },
+  { name: "Smoky Gray", color: "#393b43" },
+  { name: "Deep Teal", color: "#28403c" },
+  { name: "Forest Shadow", color: "#313f2c" },
+  { name: "Ash Green", color: "#373d35" },
+  { name: "Olive Brown", color: "#423b1f" },
+  { name: "Burnt Umber", color: "#503625" },
+  { name: "Mocha", color: "#463831" },
+  { name: "Crimson Charcoal", color: "#4f3439" },
+  { name: "Wine Smoke", color: "#46383a" },
+  { name: "Plum Shadow", color: "#493545" },
+  { name: "Midnight Violet", color: "#3f384c" }
 ];
+
+const lightPresetColorObjects = [
+  // { name: "Lavender Blush", color: "#fef7ff" },
+  // { name: "Soft Rose", color: "#fff8f9" },
+  // { name: "Ivory Blush", color: "#fff8f7" },
+  // { name: "Peach Cream", color: "#fff8f5" },
+  // { name: "Light Apricot", color: "#fff9ee" },
+  // { name: "Almond Milk", color: "#fbf9f6" },
+  // { name: "Pale Mint", color: "#f9fbf1" },
+  // { name: "Seafoam Mist", color: "#f4fbf8" },
+  // { name: "Cloud White", color: "#faf9f9" },
+  // { name: "Petal Pink", color: "#fcf8fa" },
+  // { name: "Periwinkle Tint", color: "#f9f9fe" },
+  { name: "Pure White", color: "#ffffff" }
+];
+
+
+const presets = [...darkPresetColorObjects, ...lightPresetColorObjects];
 
 const PresetColors: React.FC = () => {
   const { backgroundColor, textColor, updateBackgroundColor } = useTheme();
@@ -43,7 +53,7 @@ const PresetColors: React.FC = () => {
               className="w-full aspect-square rounded-md transition-transform hover:scale-105 relative"
               style={{ 
                 backgroundColor: preset.color,
-                border: backgroundColor === preset.color ? `2px solid ${textColor}` : '2px solid transparent',
+                border: backgroundColor === preset.color ? `2px solid ${textColor}` : '2px solid gray',
                 transform: backgroundColor === preset.color ? 'scale(1.05)' : 'scale(1)',
               }}
               aria-label={`Set color to ${preset.name}`}
@@ -79,7 +89,7 @@ const PresetColors: React.FC = () => {
                 className="w-full aspect-square rounded-md transition-transform hover:scale-105"
                 style={{ 
                   backgroundColor: color,
-                  border: backgroundColor === color ? `2px solid ${textColor}` : '2px solid transparent',
+                  border: backgroundColor === color ? `2px solid ${textColor}` : '2px solid gray',
                   transform: backgroundColor === color ? 'scale(1.05)' : 'scale(1)',
                 }}
                 aria-label={`Set color to ${color}`}
