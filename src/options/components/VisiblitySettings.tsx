@@ -86,7 +86,7 @@ const VisibilitySettings: React.FC = () => {
     chrome.storage.local.get(["visibilitySettings"], (result) => {
       if (result.visibilitySettings) {
         setVisibilitySettings(result.visibilitySettings);
-        console.log("Visibility settings set to in ExtensionOptions:", result.visibilitySettings);
+        // console.log("Visibility settings set to in ExtensionOptions:", result.visibilitySettings);
         setIsInitialized(true);
       } else {
         chrome.storage.local.set(

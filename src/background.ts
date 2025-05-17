@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log("Chrome Wallpaper Extension installed");
+  // console.log("Chrome Wallpaper Extension installed");
 });
 
 // Listen for messages from the popup

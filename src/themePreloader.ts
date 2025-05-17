@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Theme preloader to apply theme before React initialization
 const THEME_STORAGE_KEY_LOCAL = "appThemeLocal";
 
@@ -56,7 +57,7 @@ const getInitialTheme = (): AppTheme => {
       return JSON.parse(storedTheme);
     }
   } catch (error) {
-    console.error("Error reading theme from localStorage:", error);
+    // console.error("Error reading theme from localStorage:", error);
   }
   return defaultAppTheme;
 };

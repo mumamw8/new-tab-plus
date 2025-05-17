@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-refresh/only-export-components */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -119,7 +120,7 @@ const getInitialTheme = (): AppTheme => {
       return JSON.parse(storedTheme);
     }
   } catch (error) {
-    console.error("Error reading theme from localStorage:", error);
+    // console.error("Error reading theme from localStorage:", error);
   }
   return defaultAppTheme;
 };
@@ -196,7 +197,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
           localStorage.setItem(THEME_STORAGE_KEY_LOCAL, JSON.stringify(defaultAppTheme));
         }
       } catch (error) {
-        console.error("Error loading theme:", error);
+        // console.error("Error loading theme:", error);
         // If there's an error, use default theme
         setAppTheme(defaultAppTheme);
       }
