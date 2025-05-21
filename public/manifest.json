@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "New Tab Plus",
-  "version": "1.6.3",
+  "version": "0.0.1.4",
   "description": "Display bookmarks on your new tab page.",
   "chrome_url_overrides": {
     "newtab": "index.html"
@@ -10,7 +10,7 @@
     "default_icon": "icon128.png"
   },
   "options_page": "options.html",
-  "permissions": ["bookmarks", "storage", "favicon", "readingList", "scripting", "history"],
+  "permissions": ["bookmarks", "storage", "favicon", "readingList", "history"],
   "host_permissions": [],
   "background": {
     "service_worker": "background.js",

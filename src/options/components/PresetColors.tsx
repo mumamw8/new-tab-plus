@@ -16,7 +16,8 @@ const darkPresetColorObjects = [
   { name: "Crimson Charcoal", color: "#4f3439" },
   { name: "Wine Smoke", color: "#46383a" },
   { name: "Plum Shadow", color: "#493545" },
-  { name: "Midnight Violet", color: "#3f384c" }
+  { name: "Midnight Violet", color: "#3f384c" },
+  { name: 'Shadow Plum', color: '#42384b'}
 ];
 
 const lightPresetColorObjects = [
