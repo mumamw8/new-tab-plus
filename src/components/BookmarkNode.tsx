@@ -47,7 +47,7 @@ const BookmarkNode = ({
     >
       <div
         className={clsx(
-          `relative flex items-center text-2xl justify-center w-16 h-16 mb-2 rounded-2xl backdrop-blur-sm shadow-md transition-all duration-200 overflow-hidden`,
+          `relative flex items-center text-2xl justify-center w-16 h-16 mb-2 rounded-2xl backdrop-blur-sm shadow-[0_0_6px_rgb(0_0_0/0.1)] transition-all duration-200 overflow-hidden`,
           cardStyle === 'neutral' && 'bg-white/5',
           cardStyle === 'light' && 'bg-white/20',
           cardStyle === 'dark' && 'bg-gray-900/20'

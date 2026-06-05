@@ -66,7 +66,7 @@ const ReadingList: React.FC = () => {
             aria-label={item.title}
             key={idx}
             className={clsx(
-              "relative flex custom-text-color backdrop-blur-sm rounded-xl shadow-md p-2 items-center gap-4",
+              "relative flex custom-text-color backdrop-blur-sm rounded-xl shadow-[0_0_6px_rgb(0_0_0/0.1)] p-2 items-center gap-4",
               cardStyle === 'neutral' && 'bg-white/5',
               cardStyle === 'light' && 'bg-white/20',
               cardStyle === 'dark' && 'bg-gray-900/20'
