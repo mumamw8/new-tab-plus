@@ -65,7 +65,7 @@ const defaultLightTheme: ThemeData = {
   },
   background: {
     type: "color",
-    color: "#dde3e9",
+    color: "#fefefe",
   },
   cardStyle: "neutral",
 };
@@ -127,7 +127,9 @@ const getInitialTheme = (): AppTheme => {
 
 // Helper function to get system theme synchronously
 const getInitialSystemTheme = (): "light" | "dark" => {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches
+    ? "dark"
+    : "light";
 };
 
 // Helper function to apply theme styles synchronously
@@ -136,7 +138,7 @@ const applyThemeStyles = (theme: ThemeData) => {
   document.documentElement.style.setProperty(
     "--custom-text-color",
     `light-dark(${theme.text.color}, ${theme.text.color})`,
-    "important"
+    "important",
   );
 
   // Apply background
@@ -144,12 +146,12 @@ const applyThemeStyles = (theme: ThemeData) => {
     document.documentElement.style.setProperty(
       "--custom-background-image",
       "none",
-      "important"
+      "important",
     );
     document.documentElement.style.setProperty(
       "--custom-background-color",
       `light-dark(${theme.background.color}, ${theme.background.color})`,
-      "important"
+      "important",
     );
   }
 };
@@ -157,14 +159,18 @@ const applyThemeStyles = (theme: ThemeData) => {
 // Apply initial theme synchronously
 const initialTheme = getInitialTheme();
 const initialSystemTheme = getInitialSystemTheme();
-const initialCurrentTheme = initialSystemTheme === "dark" ? initialTheme.dark : initialTheme.light;
+const initialCurrentTheme =
+  initialSystemTheme === "dark" ? initialTheme.dark : initialTheme.light;
 applyThemeStyles(initialCurrentTheme);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Initialize with synchronous values
-  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(initialSystemTheme);
+  const [systemTheme, setSystemTheme] = useState<"light" | "dark">(
+    initialSystemTheme,
+  );
   const [appTheme, setAppTheme] = useState<AppTheme>(initialTheme);
-  const [currentTheme, setCurrentTheme] = useState<ThemeData>(initialCurrentTheme);
+  const [currentTheme, setCurrentTheme] =
+    useState<ThemeData>(initialCurrentTheme);
 
   // Initialize system theme
   useEffect(() => {
@@ -184,17 +190,23 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       try {
         // Load theme from storage
         const storedTheme = (await getFromChromeStorage(
-          THEME_STORAGE_KEY
+          THEME_STORAGE_KEY,
         )) as AppTheme | null;
 
         if (storedTheme) {
           setAppTheme(storedTheme);
           // Update localStorage as fallback
-          localStorage.setItem(THEME_STORAGE_KEY_LOCAL, JSON.stringify(storedTheme));
+          localStorage.setItem(
+            THEME_STORAGE_KEY_LOCAL,
+            JSON.stringify(storedTheme),
+          );
         } else {
           // If no theme is stored, use default and save it
           await setToChromeStorage(THEME_STORAGE_KEY, defaultAppTheme);
-          localStorage.setItem(THEME_STORAGE_KEY_LOCAL, JSON.stringify(defaultAppTheme));
+          localStorage.setItem(
+            THEME_STORAGE_KEY_LOCAL,
+            JSON.stringify(defaultAppTheme),
+          );
         }
       } catch (error) {
         // console.error("Error loading theme:", error);
@@ -221,7 +233,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     document.body.style.setProperty(
       "--custom-text-color",
       `light-dark(${currentTheme.text.color}, ${currentTheme.text.color})`,
-      "important"
+      "important",
     );
 
     // Apply background
@@ -229,30 +241,33 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       document.body.style.setProperty(
         "--custom-background-image",
         "none",
-        "important"
+        "important",
       );
       document.body.style.setProperty(
         "--custom-background-color",
         `light-dark(${currentTheme.background.color}, ${currentTheme.background.color})`,
-        "important"
+        "important",
       );
 
       // Remove any background image classes
       document.body.classList.remove(
         "custom-dark-transparent-background-color-class",
         "custom-light-transparent-background-color-class",
-        "custom-wallpaper-background-color-class"
+        "custom-wallpaper-background-color-class",
       );
-    } else if (currentTheme.background.type === "wallpaper" && currentTheme.background.wallpaper) {
+    } else if (
+      currentTheme.background.type === "wallpaper" &&
+      currentTheme.background.wallpaper
+    ) {
       document.body.style.setProperty(
         "--custom-background-image",
         `url(/wallpapers/${currentTheme.background.wallpaper})`,
-        "important"
+        "important",
       );
       document.body.style.setProperty(
         "--custom-background-color",
         "transparent",
-        "important"
+        "important",
       );
       document.body.classList.add("custom-wallpaper-background-color-class");
     }
@@ -262,7 +277,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const handleStorageChange = (
       changes: { [key: string]: chrome.storage.StorageChange },
-      areaName: string
+      areaName: string,
     ) => {
       if (areaName !== "local") return;
 

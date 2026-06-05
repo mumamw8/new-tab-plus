@@ -10,26 +10,30 @@
       :root {
         color-scheme: light dark;
       }
-      
+
       /* Light mode styles */
       @media (prefers-color-scheme: light) {
-        html, body {
-          background-color: #dde3e9;
+        html,
+        body {
+          background-color: #fefefe;
           color: #151516;
         }
       }
-      
+
       /* Dark mode styles */
       @media (prefers-color-scheme: dark) {
-        html, body {
+        html,
+        body {
           background-color: #3c3c3c;
           color: #ffffff;
         }
       }
-      
+
       /* Smooth transition once the app loads */
       body {
-        transition: background-color 0.2s ease, color 0.2s ease;
+        transition:
+          background-color 0.2s ease,
+          color 0.2s ease;
       }
     </style>
   </head>

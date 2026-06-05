@@ -27,7 +27,7 @@ const defaultLightTheme: ThemeData = {
   },
   background: {
     type: "color",
-    color: "#dde3e9",
+    color: "#fefefe",
   },
   cardStyle: "neutral",
 };

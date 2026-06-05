@@ -1,6 +1,6 @@
-import React from 'react';
-import { useTheme } from '../../contexts/ThemeContext';
-import useColorHistory from '../../hooks/useColorHistory';
+import React from "react";
+import { useTheme } from "../../contexts/ThemeContext";
+import useColorHistory from "../../hooks/useColorHistory";
 
 const darkPresetColorObjects = [
   { name: "Charcoal Gray", color: "#343d3f" },
@@ -17,7 +17,7 @@ const darkPresetColorObjects = [
   { name: "Wine Smoke", color: "#46383a" },
   { name: "Plum Shadow", color: "#493545" },
   { name: "Midnight Violet", color: "#3f384c" },
-  { name: 'Shadow Plum', color: '#42384b'}
+  { name: "Shadow Plum", color: "#42384b" },
 ];
 
 const lightPresetColorObjects = [
@@ -32,9 +32,9 @@ const lightPresetColorObjects = [
   // { name: "Cloud White", color: "#faf9f9" },
   // { name: "Petal Pink", color: "#fcf8fa" },
   // { name: "Periwinkle Tint", color: "#f9f9fe" },
-  { name: "Pure White", color: "#ffffff" }
+  { name: "Pure White", color: "#ffffff" },
+  { name: "Off White", color: "#fefefe" },
 ];
-
 
 const presets = [...darkPresetColorObjects, ...lightPresetColorObjects];
 
@@ -52,29 +52,36 @@ const PresetColors: React.FC = () => {
               key={preset.color}
               onClick={() => updateBackgroundColor(preset.color)}
               className="w-full aspect-square rounded-md transition-transform hover:scale-105 relative"
-              style={{ 
+              style={{
                 backgroundColor: preset.color,
-                border: backgroundColor === preset.color ? `2px solid ${textColor}` : '2px solid gray',
-                transform: backgroundColor === preset.color ? 'scale(1.05)' : 'scale(1)',
+                border:
+                  backgroundColor === preset.color
+                    ? `2px solid ${textColor}`
+                    : "2px solid gray",
+                transform:
+                  backgroundColor === preset.color ? "scale(1.05)" : "scale(1)",
               }}
               aria-label={`Set color to ${preset.name}`}
               title={preset.name}
             >
               {backgroundColor === preset.color && (
                 <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: textColor }}></span>
+                  <span
+                    className="w-1.5 h-1.5 rounded-full"
+                    style={{ backgroundColor: textColor }}
+                  ></span>
                 </span>
               )}
             </button>
           ))}
         </div>
       </div>
-      
+
       {colorHistory.length > 0 && (
         <div>
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-sm font-medium">Recent Colors</h3>
-            <button 
+            <button
               onClick={clearHistory}
               className="text-xs px-2 py-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition"
               style={{ color: textColor }}
@@ -88,17 +95,24 @@ const PresetColors: React.FC = () => {
                 key={color}
                 onClick={() => updateBackgroundColor(color)}
                 className="w-full aspect-square rounded-md transition-transform hover:scale-105"
-                style={{ 
+                style={{
                   backgroundColor: color,
-                  border: backgroundColor === color ? `2px solid ${textColor}` : '2px solid gray',
-                  transform: backgroundColor === color ? 'scale(1.05)' : 'scale(1)',
+                  border:
+                    backgroundColor === color
+                      ? `2px solid ${textColor}`
+                      : "2px solid gray",
+                  transform:
+                    backgroundColor === color ? "scale(1.05)" : "scale(1)",
                 }}
                 aria-label={`Set color to ${color}`}
                 title={color}
               >
                 {backgroundColor === color && (
                   <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: textColor }}></span>
+                    <span
+                      className="w-1.5 h-1.5 rounded-full"
+                      style={{ backgroundColor: textColor }}
+                    ></span>
                   </span>
                 )}
               </button>
