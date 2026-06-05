@@ -1,4 +1,4 @@
-# New Tab Plus
+# Tab Max
 
 A customizable, modern Chrome extension that transforms your new tab page into a powerful dashboard for bookmarks and reading list management, with beautiful theming options.
 

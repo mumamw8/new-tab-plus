@@ -1,32 +1,44 @@
 import React, { useEffect, useState } from "react";
-import { faviconURL, faviconURLFromChrome } from "../utils";
+import { faviconURL, faviconURLFromChrome, getDomain } from "../utils";
 import clsx from "clsx";
 import useCardStyle from "../hooks/useCardStyle";
 
-function sortHistoryItemsByTypedCount(historyItems: chrome.history.HistoryItem[]): chrome.history.HistoryItem[] {
-  // Filter out items that have neither typedCount nor visitCount, and blacklist chrome URLs
-  const filteredItems = historyItems.filter(item => 
-    // Check if URL exists and doesn't start with 'chrome'
+function filterHistoryItems(historyItems: chrome.history.HistoryItem[]): chrome.history.HistoryItem[] {
+  return historyItems.filter(item =>
     item.url && !item.url.toLowerCase().startsWith('chrome') &&
-    // Keep items that have either typedCount or visitCount
-    ((item.typedCount !== undefined && item.typedCount > 0) || 
+    ((item.typedCount !== undefined && item.typedCount > 0) ||
     (item.visitCount !== undefined && item.visitCount > 0))
   );
+}
 
-  return [...filteredItems].sort((a, b) => {
-    // Handle undefined values by defaulting to 0
-    const aTypedCount = a.typedCount ?? 0;
-    const bTypedCount = b.typedCount ?? 0;
-    const aVisitCount = a.visitCount ?? 0;
-    const bVisitCount = b.visitCount ?? 0;
-    
-    // Calculate total score by adding typedCount and visitCount
-    const aTotal = aTypedCount + aVisitCount;
-    const bTotal = bTypedCount + bVisitCount;
-    
-    // Sort in descending order (higher total values first)
-    return bTotal - aTotal;
-  });
+function getHistoryScore(item: chrome.history.HistoryItem): number {
+  return (item.typedCount ?? 0) + (item.visitCount ?? 0);
+}
+
+function dedupeHistoryByDomain(historyItems: chrome.history.HistoryItem[]): chrome.history.HistoryItem[] {
+  const domainMap = new Map<string, { item: chrome.history.HistoryItem; totalScore: number }>();
+
+  for (const item of historyItems) {
+    if (!item.url) continue;
+    const domain = getDomain(item.url);
+    if (!domain) continue;
+
+    const score = getHistoryScore(item);
+    const existing = domainMap.get(domain);
+
+    if (!existing) {
+      domainMap.set(domain, { item, totalScore: score });
+    } else {
+      existing.totalScore += score;
+      if (score > getHistoryScore(existing.item)) {
+        existing.item = item;
+      }
+    }
+  }
+
+  return [...domainMap.values()]
+    .sort((a, b) => b.totalScore - a.totalScore)
+    .map(({ item }) => item);
 }
 
 const SuggestionsList: React.FC = () => {
@@ -40,9 +52,9 @@ const SuggestionsList: React.FC = () => {
     const oneWeekAgo = new Date().getTime() - millisecondsPerWeek;
 
     chrome.history.search({ text: "", startTime: oneWeekAgo }, (historyItems) => {
-      // Get the top 10 history items by typedCount
-      const sortedHistory = sortHistoryItemsByTypedCount(historyItems);
-      setHistory(sortedHistory.slice(0, 10));
+      const filteredHistory = filterHistoryItems(historyItems);
+      const uniqueByDomain = dedupeHistoryByDomain(filteredHistory);
+      setHistory(uniqueByDomain.slice(0, 10));
     });
   }, []);
 
@@ -61,7 +73,7 @@ const SuggestionsList: React.FC = () => {
             href={item.url}
             title={item.title}
             aria-label={item.title}
-            key={idx}
+            key={item.url ?? idx}
             className={clsx(
               "relative flex custom-text-color backdrop-blur-sm rounded-xl shadow-md p-4 items-center gap-4",
               cardStyle === 'neutral' && 'bg-white/5',
