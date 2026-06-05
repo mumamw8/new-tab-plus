@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Max",
-  "version": "0.0.1.8",
+  "version": "0.0.1.9",
   "description": "Display bookmarks on your new tab page.",
   "chrome_url_overrides": {
     "newtab": "index.html"
